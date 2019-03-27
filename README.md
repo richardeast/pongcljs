@@ -1,6 +1,6 @@
-# pongjs
+# Pong CLJS
 
-A Quil sketch designed to ... well, that part is up to you.
+A game of Pong / Air Hockey, written in Clojure/Script
 
 ## Usage
 
@@ -14,7 +14,6 @@ Before you publish your sketch, run `lein do clean, cljsbuild once optimized`. T
 
 ## License
 
-Copyright © 2017 FIXME
+Copyright © 2019 Richard East
 
-Distributed under the Eclipse Public License either version 1.0 or (at
-your option) any later version.
+Distributed under the GNU General Public License v3.0
