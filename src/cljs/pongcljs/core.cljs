@@ -2,7 +2,8 @@
   (:require [quil.core :as q :include-macros true]
             [quil.middleware :as m]
             [pongcljs.hex-rgb :as hex]
-            [pongcljs.game-world :as game-word]))
+            [pongcljs.game-world :as game-word]
+            [pongcljs.opponents.boss :as boss]))
 
 ;; https://www.shutterstock.com/blog/neon-color-palettes
 ;; 25 Eye-Catching Neon Color Palettes to Wow Your Viewers by Alex Clem February 6, 2019
@@ -19,41 +20,14 @@
                      :pops-of-pink        ["#FFDEF3" "#FF61BE" "#3B55CE" "#35212A"]
                      :algave-glitch       ["#FDD400" "#FDB232" "#02B8A2" "#01535F"]
                      :fluorescent-fish    ["#FEC763" "#EA55B1" "#A992FA" "#00207F"]
+                     :glowing-coral       ["#79FFFE" "#FEA0FE" "#FF8B8B" "#F85125"]
                      :luminous-lines      ["#01FFC3" "#01FFFF" "#FFB3FD" "#9D72FF"]
                      :bright-bokeh        ["#FCF340" "#7FFF00" "#FB33DB" "#0310EA"]})
-(def palette (:bright-bokeh color-palettes))
+(def palette (:algave-glitch color-palettes))
 (def color-a (first palette))
 (def color-b (second palette))
 (def color-c (nth palette 2))
 (def color-d (last palette))
-
-(defn update-boss [state]
-  (let [w (q/width)
-        {{boss-angle :angle} :boss} state
-        {:keys [paddle-width]} state
-        scalar (* w 0.2) ;; size up the paddle so it can run across the board
-        speed 20
-
-        x (-> boss-angle
-              q/radians
-              (/ 10)                 ;; this affects the number of oscillations it makes
-              q/sin
-              (* scalar)             ;; size up the paddle so it can run across the board
-              (+ (/ w 2))            ;; moves it across so it can play in the centre of the board
-              (- (/ paddle-width 2)) ;; a slight offset to centre the paddle
-              )
-
-        y (-> boss-angle
-              q/radians
-              (/ 2)      ;; this affects the number of oscillations it makes
-              q/sin
-              (/ 5.5)    ;; the smaller the number the bigger the up and down movement
-              (* scalar) ;; size up the paddle so it can run across the board
-              (+ 110)    ;; move it down
-              )]
-    (assoc state :boss {:x x
-                  :y y
-                  :angle (+ boss-angle speed)})))
 
 (defn mouse-x-pos []
   (let [m (q/mouse-x)
@@ -73,7 +47,6 @@
       (> m playing-area-max-height) m
       :else playing-area-max-height)))
 
-
 (defn horizon-height []
   (/ (q/height) 6))
 
@@ -88,18 +61,6 @@
         w (:paddle-width state)
         h (:paddle-height state)]
     (q/rect x y w h)))
-
-(defn draw-boss
-  "The opponent"
-  [state]
-  (hex/fill color-b)
-  (let [boss (:boss state)
-        x (:x boss)
-        y (:y boss)
-        w (:paddle-width state)
-        h (:paddle-height state)]
-    (q/rect x y w h)))
-
 
 (defn update-puck [state]
   (let [{{start-x :x start-y :y} :puck} state
@@ -119,14 +80,14 @@
   ;; threading macro not needed because these functions all draw to the screen. (Therefore not pure.)
   (q/no-cursor)
   (game-word/draw-game-world palette)
-  (draw-boss state)
+  (boss/draw-boss state palette)
   (draw-puck state)
   (draw-player state))
 
 (defn update-game [state]
   ;; threading macro used so the game state gets passed from function to the next
   (-> state
-      update-boss
+      boss/update-boss
       update-puck))
 
 (defn setup []
