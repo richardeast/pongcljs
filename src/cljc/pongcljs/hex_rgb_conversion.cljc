@@ -28,7 +28,7 @@
 (defn hex->rgb
   "Turn css hex into RGB seq"
   [^String s]
-  (condp = (count s)
+  (condp = (bounded-count 8 s)
     7 (hex->rgb-long s)
     ;; normal hex, otherwise presume shorthand hex code.
     ;;else
