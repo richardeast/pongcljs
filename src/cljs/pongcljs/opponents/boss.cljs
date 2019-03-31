@@ -1,12 +1,7 @@
 (ns pongcljs.opponents.boss
   (:require [quil.core :as q :include-macros true]
-            [quil.middleware :as m]
+            [pongcljs.styles :as styles]
             [pongcljs.hex-rgb :as hex]))
-
-(defn color-a [palette] (first palette))
-(defn color-b [palette] (second palette))
-(defn color-c [palette] (nth palette 2))
-(defn color-d [palette] (last palette))
 
 (defn update-boss [state]
   (let [w (q/width)
@@ -38,8 +33,8 @@
 
 (defn draw-boss
   "The opponent"
-  [state palette]
-  (hex/fill (color-b palette))
+  [state]
+  (hex/fill styles/color-b)
   (let [boss (:boss state)
         x (:x boss)
         y (:y boss)

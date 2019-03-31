@@ -1,3 +1,4 @@
 target/*
 .rebel_readline_history
 figwheel_server.log
+resources/public/js/development/*

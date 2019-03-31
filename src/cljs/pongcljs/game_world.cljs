@@ -1,23 +1,19 @@
 (ns pongcljs.game-world
   (:require [quil.core :as q :include-macros true]
-            [quil.middleware :as m]
+            [pongcljs.styles :as styles]
             [pongcljs.hex-rgb :as hex]))
 
-(defn color-a [palette] (first palette))
-(defn color-b [palette] (second palette))
-(defn color-c [palette] (nth palette 2))
-(defn color-d [palette] (last palette))
 
 (defn horizon-height []
   (/ (q/height) 6))
 
-(defn draw-sky [palette]
-  (hex/background (color-d palette))
+(defn draw-sky []
+  (hex/background styles/color-d)
   ;; TODO make the sky more interesting
   )
 
-(defn draw-ground [palette]
-  (hex/fill (color-c palette))
+(defn draw-ground []
+  (hex/fill styles/color-c)
   (q/rect 0
           (horizon-height)
           (- (q/width) 0)
@@ -44,13 +40,13 @@
             x3 y3
             x4 y4)))
 
-(defn draw-tennis-court [palette]
+(defn draw-tennis-court []
   (let [h (q/height)
         w (q/width)
         centre-x (/ w 2)
         centre-y (/ h 2)]
     (q/fill 0)
-    (hex/stroke (color-a palette))
+    (hex/stroke styles/color-a)
     (q/stroke-weight 3)
     (draw-court-quadrant)
     (q/line 172 (/ h 3.5) 677 (/ h 3.5))
@@ -59,7 +55,7 @@
     (q/stroke 0)
     (q/stroke-weight 1)))
 
-(defn draw-game-world [palette]
-  (draw-sky palette)
-  (draw-ground palette)
-  (draw-tennis-court palette))
+(defn draw-game-world []
+  (draw-sky)
+  (draw-ground)
+  (draw-tennis-court))
