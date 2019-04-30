@@ -3,7 +3,7 @@
             [quil.middleware :as m]
             [pongcljs.hex-rgb :as hex]
             [pongcljs.styles :as styles]
-            [pongcljs.game-world :as game-word]
+            [pongcljs.game-world :as game-world]
             [pongcljs.opponents.boss :as boss]
             [pongcljs.puck :as puck]
             [pongcljs.player :as player]))
@@ -11,7 +11,7 @@
 (defn draw [state]
   ;; threading macro not needed because these functions all draw to the screen. (Therefore not pure.)
   (q/no-cursor)
-  (game-word/draw-game-world)
+  (game-world/draw-game-world)
   (boss/draw-boss state)
   (puck/draw-puck state)
   (player/draw-player state))
@@ -28,9 +28,7 @@
   ;; The initial state
   {:paddle-width 100
    :paddle-height 30
-   :puck {:x (/ (q/height) 2)
-          :y (/ (q/width) 2)
-          :angle 0.0}
+   :puck (game-world/centre)
    :boss {:x 0
           :y 0
           :angle 0.0}})

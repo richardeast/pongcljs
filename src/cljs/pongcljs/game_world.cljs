@@ -12,6 +12,16 @@
   ;; TODO make the sky more interesting
   )
 
+
+(defn centre
+  "get the centre of the game world. This can be used elsewhere, such as resetting the puck."
+  []
+  (let [h (q/height)
+        w (q/width)]
+    {:x (/ w 2)
+     :y (/ h 2)}))
+
+
 (defn draw-ground []
   (hex/fill styles/color-c)
   (q/rect 0
@@ -43,8 +53,8 @@
 (defn draw-tennis-court []
   (let [h (q/height)
         w (q/width)
-        centre-x (/ w 2)
-        centre-y (/ h 2)]
+        centre-x (:x (centre))
+        centre-y (:y (centre))]
     (q/fill 0)
     (hex/stroke styles/color-a)
     (q/stroke-weight 3)
