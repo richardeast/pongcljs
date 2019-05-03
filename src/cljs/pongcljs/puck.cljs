@@ -5,48 +5,52 @@
             [pongcljs.hex-rgb :as hex]
             [pongcljs.styles :as styles]))
 
-;; Should be in a Score ns
-(defn player-scored?
-  "They score if they have gone over the horizon"
-  [y]
-  (< y (game-world/horizon-height)))
+(def away -)    ;; away from the player
+(def towards +) ;; towards the player
 
-;; Should be in a Score ns
-(defn opponent-scored?
-  "They score if they have gone over the bottom of screen"
-  [y]
-  false)
+(defn toggle-direction
+  "Update the direction of the puck. If it's going away, flip towards and visa-versa"
+  [state]
+  (let [d (get-in state [:puck :direction])
+        toggle (if (= d away) towards
+                              away)]
+   (assoc-in state [:puck :direction] toggle)))
 
 (defn speed
   ""
   [state]
-  -0.7
-  )
-
+  (let [d (get-in state [:puck :direction])]
+    (d 0.7)))
 
 (defn update-y [state]
-  (let [{{x :x y :y} :puck} state]
-    (cond
-      (player-scored? y) (:y (game-world/centre))
-      :else
-      (+ y (speed state)))))
+  (let [y (get-in state [:puck :pos :y])]
+    (+ y -0.7)
+    ;;TODO - this is where it breaks
+;;    (+ y (speed state))
+
+
+    ))
 
 (defn update-x [state]
-  (let [{{x :x y :y} :puck} state]
-    (cond
-      (< y (game-world/horizon-height)) (:x (game-world/centre))
-      :else
-      (+ x (speed state)))))
+  (let [x (get-in state [:puck :pos :x])]
+    (+ x -0.7)))
 
 (defn update-puck [state]
-  (let [{{start-x :x start-y :y} :puck} state
-        x (update-x state)
+  (let [x (update-x state)
         y (update-y state)]
-    (assoc state :puck {:x x
-                        :y y})))
+    (assoc-in state [:puck :pos] {:x x
+                                  :y y})))
+
+(defn reset-in-centre
+  "Puts the puck state in the centre of the board. This function is called outside of this namespace, such as when a player scores."
+  [state]
+  (let [d (:direction (:puck state)) ]
+    (assoc state :puck {:pos (game-world/centre)
+                        :direction d})))
 
 (defn draw-puck [state]
-  (let [{{:keys [x y]} :puck} state]
+  (let [puck (:puck state)
+        {{:keys [x y]} :pos} puck]
     (hex/fill styles/color-b)
     (q/ellipse x y 50 25)
     (q/ellipse x (- y 5) 50 25)))

@@ -3,7 +3,6 @@
             [pongcljs.styles :as styles]
             [pongcljs.hex-rgb :as hex]))
 
-
 (defn horizon-height []
   (/ (q/height) 6))
 
@@ -12,7 +11,6 @@
   ;; TODO make the sky more interesting
   )
 
-
 (defn centre
   "get the centre of the game world. This can be used elsewhere, such as resetting the puck."
   []
@@ -20,7 +18,6 @@
         w (q/width)]
     {:x (/ w 2)
      :y (/ h 2)}))
-
 
 (defn draw-ground []
   (hex/fill styles/color-c)
