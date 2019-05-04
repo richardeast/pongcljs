@@ -14,8 +14,7 @@
 (defn opponent-scored?
   "They score if they have gone off the bottom of screen"
   [y]
-  ;;TODO
-  false)
+  (> y (q/height)))
 
  (defn update-state
    "Update the state based on the effects of someone scoring"

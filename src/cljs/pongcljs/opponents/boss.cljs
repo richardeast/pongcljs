@@ -6,7 +6,7 @@
 (defn update-boss [state]
   (let [w (q/width)
         {{boss-angle :angle} :boss} state
-        {:keys [paddle-width]} state
+        paddle-width (get-in state [:paddle :width])
         scalar (* w 0.2) ;; size up the paddle so it can run across the board
         speed 20
 
@@ -35,9 +35,6 @@
   "The opponent"
   [state]
   (hex/fill styles/color-b)
-  (let [boss (:boss state)
-        x (:x boss)
-        y (:y boss)
-        w (:paddle-width state)
-        h (:paddle-height state)]
+  (let [{x :x y :y} (get-in state [:boss])
+        {w :width h :height} (get-in state [:paddle])]
     (q/rect x y w h)))

@@ -10,11 +10,11 @@
 
 ;; The global state is supposed to be bad, so this puts it to the test
 (def starting-state
-  {:paddle-width 100
-   :paddle-height 30
+  {:paddle {:width 100 :height 30}
    :score [0 0]
    :puck {:pos nil
           :direction nil}
+   :player {:pos nil}
    :boss {:x 0
           :y 0
           :angle 0.0}
@@ -23,8 +23,11 @@
 (defn get-starting-state
   "Get the starting state of the application, but inject in additional environmental data."
   []
-  (assoc starting-state :puck {:pos (game-world/centre)
-                               :direction (puck/away)}))
+  (->
+   (assoc starting-state :puck {:pos (game-world/centre)
+                                :direction puck/away})
+   (assoc-in [:player :pos] {:x (player/mouse-x-pos)
+                             :y (player/mouse-y-pos)})))
 
 (defn draw-hud
   "Head-up Display"
@@ -38,6 +41,7 @@
   (-> state
        score/update-score
        boss/update-boss
+       player/update-player
        puck/update-puck))
 
 (defn draw [state]
@@ -54,18 +58,7 @@
   (q/frame-rate 60)
   (q/smooth)
   ;; Return the initial state of the game
- ;; starting-state
-  ;; {:paddle-width 100
-  ;;  :paddle-height 30
-  ;;  :score [0 0]
-  ;;  :puck {:pos (game-world/centre)
-  ;;         :direction (puck/away)
-  ;;         }
-  ;;  :boss {:x 0
-  ;;         :y 0
-  ;;         :angle 0.0}}
-  (get-starting-state)
-  )
+  (get-starting-state))
 
 (q/sketch
   :host "pongjs"

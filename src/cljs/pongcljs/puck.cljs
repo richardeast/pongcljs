@@ -24,16 +24,15 @@
 
 (defn update-y [state]
   (let [y (get-in state [:puck :pos :y])]
-    (+ y -0.7)
+    (+ y -0.07)
     ;;TODO - this is where it breaks
-;;    (+ y (speed state))
-
+    (+ y (speed state))
 
     ))
 
 (defn update-x [state]
   (let [x (get-in state [:puck :pos :x])]
-    (+ x -0.7)))
+    (+ x -0.07)))
 
 (defn update-puck [state]
   (let [x (update-x state)
