@@ -8,26 +8,23 @@
 
 (defn player-scored?
   "They score if they have gone over the horizon"
-  [y]
-  (< y (game-world/horizon-height)))
+  [y] (< y (game-world/horizon-height)))
 
 (defn opponent-scored?
   "They score if they have gone off the bottom of screen"
-  [y]
-  (> y (q/height)))
+  [y] (> y (q/height)))
 
  (defn update-state
    "Update the state based on the effects of someone scoring"
    [state score]
    (-> (assoc state :score score)
        (puck/reset-in-centre)
-       (puck/toggle-direction)
-       ))
+       (puck/toggle-direction)))
 
 (defn update-score
   "Update the score"
   [state]
-  (let [y (get-in state [:puck :pos :y]) ;; when calculating score we only care about :y position. (Up and down the board. :x position is irrelevant.)
+  (let [y (get-in state [:puck :pos :y]) ;; when calculating score we only care about up and down the board. :x position is irrelevant.
         [opponent player] (:score state)]
     (cond
       (player-scored? y) (update-state state [opponent (inc player)])
@@ -41,4 +38,4 @@
   (let [[a b] (:score state)]
     (hex/fill styles/color-b)
     (q/text-size 40)
-    (q/text (str a  " : " b) 700 60)))
+    (q/text (str a  " : " b) 680 60)))
