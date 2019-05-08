@@ -27,14 +27,14 @@
               (* scalar) ;; size up the paddle so it can run across the board
               (+ 110)    ;; move it down
               )]
-    (assoc state :boss {:x x
-                  :y y
+    (assoc state :boss {:pos {:x x
+                              :y y}
                   :angle (+ boss-angle speed)})))
 
 (defn draw-boss
   "The opponent"
   [state]
   (hex/fill styles/color-b)
-  (let [{x :x y :y} (get-in state [:boss])
+  (let [{x :x y :y} (get-in state [:boss :pos])
         {w :width h :height} (get-in state [:paddle])]
     (q/rect x y w h)))
