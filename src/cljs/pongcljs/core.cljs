@@ -37,13 +37,22 @@
        player/update-player
        puck/update-puck))
 
+(defn key-pressed?
+  "has a key been pressed?"
+  [k event] (= k (:key event)))
+
 (defn key-pressed
-  ""
   [state event]
-  ;; TODO make it just the h key
-  (-> state
-      (assoc :event event)
-      hud/toggle-hud))
+  (let [updated-state (assoc state :event event)]
+    (cond
+      (key-pressed? :h event) (hud/toggle-hud updated-state) ;; toggle hud if h key pressed
+      ;; TODO add more keys. Such as:
+      ;; cheat/god mode
+      ;; play/pause (this could be space which maybe is (keyword " "))
+      ;; quit/new game/menu
+      ;; help
+      ;; actions to spice up the game.
+      :else updated-state)))
 
 (defn draw [state]
   ;; threading macro not needed because these functions all draw to the screen. (Therefore not pure.)
