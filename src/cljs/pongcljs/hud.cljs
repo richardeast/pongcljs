@@ -11,8 +11,7 @@
 
 (defn pprint-2dp
   "Print to two decimal places."
-  [s]
-  (pprint/cl-format nil "~6f" s))
+  [s] (pprint/cl-format nil "~6f" s))
 
 (defn pprint-xy
   "print x y coordinates for an object to two decimal places."
@@ -21,29 +20,46 @@
                ",\n"
                " y:" (pprint-2dp y1)) x2 y2))
 
+(defn draw-puck-position
+  [puck]
+  (let [{x :x y :y} (:pos puck)]
+    (q/text-size 15)
+    (pprint-xy x y (+ 25 x) y)))
+
+(defn draw-player-position
+  [player paddle]
+  (let [{x :x y :y} (:pos player)]
+    (q/text-size 15)
+    (pprint-xy x y (+ (:width paddle) x) y)))
+
+(defn draw-boss-position
+  [boss paddle]
+  (let [{x :x y :y} (:pos boss)
+        angle (:angle boss)]
+    (q/text-size 15)
+    (pprint-xy x y (+ (:width paddle) x) y)
+    (q/text (str "\n\n angle: " angle) (+ (:width paddle) x) y)))
+
 (defn draw-mouse-pointer-position
   []
   (q/text-size 15)
   (pprint-xy (q/mouse-x) (q/mouse-y) (+ 5 (q/mouse-x)) (+ 15 (q/mouse-y)))
   (q/stroke 235 135 0)
-  (q/line 0 (q/mouse-y) (q/width) (q/mouse-y))
+  (q/line 0 (q/mouse-y) (q/width) (q/mouse-y)) ;; vertical line
   (q/stroke 0 235 135)
-  (q/line (q/mouse-x) 0 (q/mouse-x) (q/height)))
+  (q/line (q/mouse-x) 0 (q/mouse-x) (q/height)) ;; horizontal line
+  )
 
 (defn draw-hud
   "Head-up Display"
   [state]
-  ;; TODO put the details of the hud values, next to their objects
-  (when (true? (get-in state [:hud :show]))
+  (cond (true? (get-in state [:hud :show]))
     (let [{paddle :paddle
            puck :puck
            score :score
            player :player
            boss :boss
-           event :event} state
-          {puck-x :x puck-y :y} (:pos puck)
-          {player-x :x player-y :y} (:pos player)
-          {boss-x :x boss-y :y} (:pos boss)]
+           event :event} state]
       ;; TODO comp pprint with-out-str q/text and make cljs.pprint work with java
       (q/text-size 20)
       ;; (q/text (with-out-str (pprint/pprint state)) 30 30)
@@ -53,9 +69,10 @@
                    ;; ":boss " boss ",\n"
                    ":event " event)
               30 30)
-      (q/text-size 15)
-      (pprint-xy puck-x puck-y (+ 25 puck-x) puck-y)
-      (pprint-xy player-x player-y (+ (:width paddle) player-x) player-y)
-      ;; TODO Add the boss angle
-      (pprint-xy boss-x boss-y (+ (:width paddle) boss-x) boss-y)
-      (draw-mouse-pointer-position))))
+      (draw-player-position player paddle)
+      (draw-puck-position puck)
+      (draw-boss-position boss paddle)
+      (draw-mouse-pointer-position)
+      (q/cursor))
+    :else
+    (q/no-cursor)))

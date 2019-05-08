@@ -64,7 +64,6 @@
        (hud/draw-hud state))
 
 (defn setup []
-;;  (q/no-cursor)
   (q/frame-rate 60)
   (q/smooth)
   ;; Return the initial state of the game
