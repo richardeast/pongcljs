@@ -29,7 +29,7 @@
 (defn draw-player
   "The player is a pong bat, but could be a character like Mario or Space Harrier"
   [state]
-  (hex/fill styles/color-a 200)
+  (hex/fill (styles/color-a state) 200)
   (let [{x :x y :y} (get-in state [:player :pos])
         {w :width h :height} (get-in state [:paddle])]
     (q/rect x y w h)))

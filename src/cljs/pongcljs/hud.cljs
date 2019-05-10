@@ -54,20 +54,25 @@
   "Head-up Display"
   [state]
   (cond (true? (get-in state [:hud :show]))
-    (let [{paddle :paddle
+    (let [{boss :boss
+           event :event
+           paddle :paddle
+           player :player
            puck :puck
            score :score
-           player :player
-           boss :boss
-           event :event} state]
+           style :style} state]
       ;; TODO comp pprint with-out-str q/text and make cljs.pprint work with java
       (q/text-size 20)
       ;; (q/text (with-out-str (pprint/pprint state)) 30 30)
-      (q/text (str ":paddle " paddle ",\n"
-                   ;; ":puck " puck ",\n"
-                   ;; ":player " player ",\n"
-                   ;; ":boss " boss ",\n"
-                   ":event " event)
+      (q/text (str ":event " event ",\n"
+                  ;; ":boss " boss ",\n"
+                  ;; ":paddle " paddle ",\n"
+                  ;; ":player " player ",\n"
+                  ;; ":puck " puck ",\n"
+                  ;; ":paddle " paddle ",\n"
+                  ;; ":score " score ",\n"
+                   ":style " style
+                   )
               30 30)
       (draw-player-position player paddle)
       (draw-puck-position puck)

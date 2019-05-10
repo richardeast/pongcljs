@@ -34,7 +34,7 @@
 (defn draw-boss
   "The opponent"
   [state]
-  (hex/fill styles/color-b)
+  (hex/fill (styles/color-b state))
   (let [{x :x y :y} (get-in state [:boss :pos])
         {w :width h :height} (get-in state [:paddle])]
     (q/rect x y w h)))

@@ -6,8 +6,8 @@
 (defn horizon-height []
   (/ (q/height) 6))
 
-(defn draw-sky []
-  (hex/background styles/color-d)
+(defn draw-sky [state]
+  (hex/background (styles/color-d state))
   ;; TODO make the sky more interesting
   )
 
@@ -19,8 +19,8 @@
     {:x (/ w 2)
      :y (/ h 2)}))
 
-(defn draw-ground []
-  (hex/fill styles/color-c)
+(defn draw-ground [state]
+  (hex/fill (styles/color-c state))
   (q/rect 0
           (horizon-height)
           (- (q/width) 0)
@@ -47,13 +47,13 @@
             x3 y3
             x4 y4)))
 
-(defn draw-tennis-court []
+(defn draw-tennis-court [state]
   (let [h (q/height)
         w (q/width)
         centre-x (:x (centre))
         centre-y (:y (centre))]
     (q/fill 0)
-    (hex/stroke styles/color-a)
+    (hex/stroke (styles/color-a state))
     (q/stroke-weight 3)
     (draw-court-quadrant)
     (q/line 172 (/ h 3.5) 677 (/ h 3.5))
@@ -62,7 +62,7 @@
     (q/stroke 0)
     (q/stroke-weight 1)))
 
-(defn draw-game-world []
-  (draw-sky)
-  (draw-ground)
-  (draw-tennis-court))
+(defn draw-game-world [state]
+  (draw-sky state)
+  (draw-ground state)
+  (draw-tennis-court state))

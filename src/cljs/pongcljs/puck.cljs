@@ -25,9 +25,7 @@
 (defn update-y [state]
   (let [y (get-in state [:puck :pos :y])]
     (+ y -0.07)
-    ;;TODO - this is where it breaks
     (+ y (speed state))
-
     ))
 
 (defn update-x [state]
@@ -50,6 +48,6 @@
 (defn draw-puck [state]
   (let [puck (:puck state)
         {{:keys [x y]} :pos} puck]
-    (hex/fill styles/color-b)
+    (hex/fill (styles/color-b state))
     (q/ellipse x y 50 25)
     (q/ellipse x (- y 5) 50 25)))

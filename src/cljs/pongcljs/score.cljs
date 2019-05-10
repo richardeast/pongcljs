@@ -36,6 +36,6 @@
   "Show the score"
   [state]
   (let [[a b] (:score state)]
-    (hex/fill styles/color-b)
+    (hex/fill (styles/color-b state))
     (q/text-size 40)
     (q/text (str a  " : " b) 680 60)))

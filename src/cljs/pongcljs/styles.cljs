@@ -5,6 +5,7 @@
 ;; "Discover a neon color palette for every occasion, from bold party invitations to dramatic website designs. Get these hex color codes for the best neon hues."
 ;; TODO - move to an edn file and read in.
 ;; I'm lining up the css-hex codes to help identify typos.
+;; TODO Add the active palette to the state.
 (def color-palettes {:geometric-glow      ["#08F7FE" "#09FBD3" "#FE53BB" "#F5D300"]
                      :neon-lights         ["#FFACFC" "#F148FB" "#7122FA" "#560A86"]
                      :psychedelic-pattern ["#75D5FD" "#B76CFD" "#FF2281" "#011FFD"]
@@ -20,9 +21,18 @@
                      :luminous-lines      ["#01FFC3" "#01FFFF" "#FFB3FD" "#9D72FF"]
                      :sharp-stationery    ["#A0EDFF" "#EBF875" "#28CF75" "#FE6B35"]
                      :bright-bokeh        ["#FCF340" "#7FFF00" "#FB33DB" "#0310EA"]})
-(def palette (:algave-glitch color-palettes))
 
-(def color-a (first palette))
-(def color-b (second palette))
-(def color-c (nth palette 2))
-(def color-d (last palette))
+(def get-current-style #(get-in % [:style]))
+(def get-current-palette #(get color-palettes (get-current-style %)))
+(defn pick-color [f state]
+  (f (get-current-palette state)))
+
+(def color-a (fn [state] (pick-color first state)))
+(def color-b (fn [state] (pick-color second state)))
+(def color-c (fn [state] (pick-color #(nth % 2) state)))
+(def color-d (fn [state] (pick-color last state)))
+
+(defn pick-random-palette []
+  (-> color-palettes
+      keys
+      rand-nth))

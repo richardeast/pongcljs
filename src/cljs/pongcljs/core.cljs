@@ -9,16 +9,18 @@
             [pongcljs.styles :as styles]
             [pongcljs.score :as score]))
 
-;; The global state is supposed to be bad, so this puts it to the test
+;; "There's a simple rule that everybody follows - put all your app-state in one place" - David Nolen https://clojurescriptpodcast.com/ S1E1
+;; TODO This is going to get bigger. Bigger than a screen and it needs to be pulled out of this namespace
 (def starting-state
-  {:paddle {:width 100 :height 30}
-   :score [0 0]
+  {:boss {:pos nil
+          :angle 0.0}
+   :hud {:show true}
+   :paddle {:width 100 :height 30}
+   :player {:pos nil}
    :puck {:pos nil
           :direction nil}
-   :player {:pos nil}
-   :boss {:pos nil
-          :angle 0.0}
-   :hud {:show false}})
+   :score [0 0]
+   :style :algave-glitch})
 
 (defn get-starting-state
   "Get the starting state of the application, but inject in additional environmental data."
@@ -46,6 +48,8 @@
   (let [updated-state (assoc state :event event)]
     (cond
       (key-pressed? :h event) (hud/toggle-hud updated-state) ;; toggle hud if h key pressed
+      (key-pressed? :c event) (assoc-in updated-state [:style]
+                                (styles/pick-random-palette)) ;; pick new colour
       ;; TODO add more keys. Such as:
       ;; cheat/god mode
       ;; play/pause (this could be space which maybe is (keyword " "))
@@ -56,12 +60,12 @@
 
 (defn draw [state]
   ;; threading macro not needed because these functions all draw to the screen. (Therefore not pure.)
-       (game-world/draw-game-world)
-       (boss/draw-boss state)
-       (puck/draw-puck state)
-       (player/draw-player state)
-       (score/draw-score state)
-       (hud/draw-hud state))
+  (game-world/draw-game-world state)
+  (boss/draw-boss state)
+  (puck/draw-puck state)
+  (player/draw-player state)
+  (score/draw-score state)
+  (hud/draw-hud state))
 
 (defn setup []
   (q/frame-rate 60)
