@@ -29,7 +29,7 @@
    (assoc starting-state :puck {:pos (game-world/centre)
                                 :direction puck/away})
    (assoc-in [:player :pos] {:x (player/mouse-x-pos)
-                             :y (player/mouse-y-pos)})))
+                             :y (q/mouse-y) })))
 
 (defn update-game [state]
   ;; threading macro used so the game state gets passed from function to the next

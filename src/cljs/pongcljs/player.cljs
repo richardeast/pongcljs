@@ -11,11 +11,14 @@
       (> m w) w
       :else m)))
 
-(defn mouse-y-pos []
+(defn mouse-y-pos [state]
   (let [m (q/mouse-y)
         h (q/height)
+        paddle-height (get-in state [:paddle :height])
         ;; restrict player to a playing area they cannot go out of
-        playing-area-max-height (* h (/ 2 3))]
+        playing-area-max-height (- (/ h 1.3) ;;magic number
+                                   (/ paddle-height
+                                      2))]
     (cond
       (< m 10) 10
       (> m playing-area-max-height) m
@@ -24,12 +27,16 @@
 (defn update-player
   [state]
   (assoc-in state [:player :pos] {:x (mouse-x-pos)
-                                  :y (mouse-y-pos)}))
+                                  :y (mouse-y-pos state)}))
 
 (defn draw-player
   "The player is a pong bat, but could be a character like Mario or Space Harrier"
   [state]
   (hex/fill (styles/color-a state) 200)
   (let [{x :x y :y} (get-in state [:player :pos])
-        {w :width h :height} (get-in state [:paddle])]
-    (q/rect x y w h)))
+        {w :width h :height} (get-in state [:paddle])
+        x2 (- x (/ w 2)) ;; this adds an offset,
+                         ;; otherwise the player paddle would not be at the centre of the mouse.
+        y2 (- y (/ h 2)) ;; as above
+        ]
+    (q/rect x2 y2 w h)))
