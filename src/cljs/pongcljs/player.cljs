@@ -1,6 +1,7 @@
 (ns pongcljs.player
   (:require [quil.core :as q :include-macros true]
             [pongcljs.hex-rgb :as hex]
+            [pongcljs.puck :as puck]
             [pongcljs.styles :as styles]))
 
 (defn mouse-x-pos []
@@ -18,16 +19,42 @@
         ;; restrict player to a playing area they cannot go out of
         playing-area-max-height (- (/ h 1.3) ;;magic number
                                    (/ paddle-height
-                                      2))]
+                                      2))
+        playing-area-min-height (- h (/ paddle-height
+                                        2))]
     (cond
-      (< m 10) 10
+      (> m playing-area-min-height) playing-area-min-height
       (> m playing-area-max-height) m
       :else playing-area-max-height)))
 
+(defn hit-puck?
+  "They hit the puck if the bottom of the puck touches the player's paddle"
+  [state]
+  (let [{puck :puck
+         paddle :paddle
+         player :player} state
+        {:keys [pos height width depth]} puck
+        {x :x y :y} pos
+        puck-bottom (+ y (/ height 2) depth)
+        {player-x :x player-y :y} (:pos player)
+        paddle-height (:height paddle)]
+    (cond
+      (and (> puck-bottom player-y)
+           (< puck-bottom (+ player-y (/ paddle-height 2)))
+           (> x (- player-x (/ (:width paddle) 2)))
+           (< x (+ player-x (/ (:width paddle) 2)))) true
+      :else false)))
+
 (defn update-player
   [state]
-  (assoc-in state [:player :pos] {:x (mouse-x-pos)
-                                  :y (mouse-y-pos state)}))
+  (if (hit-puck? state)
+    (->
+     (puck/toggle-direction state)
+     (assoc-in [:player :pos] {:x (mouse-x-pos)
+                               :y (mouse-y-pos state)}))
+    ;;else
+    (assoc-in state [:player :pos] {:x (mouse-x-pos)
+                                    :y (mouse-y-pos state)})))
 
 (defn draw-player
   "The player is a pong bat, but could be a character like Mario or Space Harrier"

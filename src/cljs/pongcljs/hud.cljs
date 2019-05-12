@@ -50,6 +50,15 @@
   (q/line (q/mouse-x) 0 (q/mouse-x) (q/height)) ;; horizontal line
   )
 
+(defn draw-corners-of-screen
+  []
+  (q/text-size 12)
+  ;; don't need top left - it's 0 0
+  (pprint-xy (q/width) 0 (- (q/width) 60) 20) ;; top right
+  (pprint-xy 0 (q/height) 20 (- (q/height) 20)) ;; bottom left
+  (pprint-xy (q/width) (q/height) (- (q/width) 60) (- (q/height) 20)) ;; bottom right
+  )
+
 (defn draw-hud
   "Head-up Display"
   [state]
@@ -68,7 +77,7 @@
                   ;; ":boss " boss ",\n"
                   ;; ":paddle " paddle ",\n"
                   ;; ":player " player ",\n"
-                  ;; ":puck " puck ",\n"
+                  ":puck " puck ",\n"
                   ;; ":paddle " paddle ",\n"
                   ;; ":score " score ",\n"
                    ":style " style
@@ -78,6 +87,7 @@
       (draw-puck-position puck)
       (draw-boss-position boss paddle)
       (draw-mouse-pointer-position)
+      (draw-corners-of-screen)
       (q/cursor))
     :else
     (q/no-cursor)))

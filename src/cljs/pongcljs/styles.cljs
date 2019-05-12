@@ -32,7 +32,7 @@
 (def color-c (fn [state] (pick-color #(nth % 2) state)))
 (def color-d (fn [state] (pick-color last state)))
 
-(defn pick-random-palette []
+(defn random-style []
   (-> color-palettes
       keys
       rand-nth))

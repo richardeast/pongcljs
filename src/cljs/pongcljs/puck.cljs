@@ -41,13 +41,12 @@
 (defn reset-in-centre
   "Puts the puck state in the centre of the board. This function is called outside of this namespace, such as when a player scores."
   [state]
-  (let [d (:direction (:puck state)) ]
-    (assoc state :puck {:pos (game-world/centre)
-                        :direction d})))
+  (assoc-in state [:puck :pos] (game-world/centre)))
 
 (defn draw-puck [state]
   (let [puck (:puck state)
-        {{:keys [x y]} :pos} puck]
+        {{:keys [x y]} :pos} puck
+         {h :height w :width d :depth} puck]
     (hex/fill (styles/color-b state))
-    (q/ellipse x y 50 25)
-    (q/ellipse x (- y 5) 50 25)))
+    (q/ellipse x y w h)
+    (q/ellipse x (- y d) w h)))

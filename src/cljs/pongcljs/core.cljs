@@ -18,7 +18,10 @@
    :paddle {:width 100 :height 30}
    :player {:pos nil}
    :puck {:pos nil
-          :direction nil}
+          :direction nil
+          :height 25
+          :width 50
+          :depth 5}
    :score [0 0]
    :style :algave-glitch})
 
@@ -26,9 +29,9 @@
   "Get the starting state of the application, but inject in additional environmental data."
   []
   (->
-   (assoc starting-state :puck {:pos (game-world/centre)
-                                :direction puck/away})
-   (assoc-in [:player :pos] {:x (player/mouse-x-pos)
+   (assoc-in starting-state [:puck :pos] (game-world/centre))
+   (assoc-in [:puck :direction] puck/away)
+   (assoc-in [:player :pos] {:x (player/mouse-x-pos)  ;; TODO think about this. Should this be q/mouse-x
                              :y (q/mouse-y) })))
 
 (defn update-game [state]
@@ -44,12 +47,13 @@
   [k event] (= k (:key event)))
 
 (defn key-pressed
+  "This function needs to return the state"
   [state event]
   (let [updated-state (assoc state :event event)]
     (cond
       (key-pressed? :h event) (hud/toggle-hud updated-state) ;; toggle hud if h key pressed
       (key-pressed? :c event) (assoc-in updated-state [:style]
-                                (styles/pick-random-palette)) ;; pick new colour
+                                        (styles/random-style)) ;; pick new colour
       ;; TODO add more keys. Such as:
       ;; cheat/god mode
       ;; play/pause (this could be space which maybe is (keyword " "))
