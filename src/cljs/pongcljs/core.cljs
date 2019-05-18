@@ -1,7 +1,9 @@
 (ns pongcljs.core
+  "This is the heart of the game. Everything is called from here."
   (:require [quil.core :as q :include-macros true]
             [quil.middleware :as m]
             [pongcljs.game-world :as game-world]
+            [pongcljs.help :as help]
             [pongcljs.hud :as hud]
             [pongcljs.opponents.boss :as boss]
             [pongcljs.player :as player]
@@ -9,12 +11,16 @@
             [pongcljs.styles :as styles]
             [pongcljs.score :as score]))
 
+;;; ToDos
+;; TODO - https://js.org/ - host the running project
+
 ;; "There's a simple rule that everybody follows - put all your app-state in one place" - David Nolen https://clojurescriptpodcast.com/ S1E1
 ;; TODO This is going to get bigger. Bigger than a screen and it needs to be pulled out of this namespace
 (def starting-state
   {:boss {:pos nil
           :angle 0.0}
-   :hud {:show true}
+   :help nil
+   :hud {:show nil}
    :paddle {:width 100 :height 30}
    :player {:pos nil}
    :puck {:pos nil
@@ -31,8 +37,9 @@
   (->
    (assoc-in starting-state [:puck :pos] (game-world/centre))
    (assoc-in [:puck :direction] puck/away)
-   (assoc-in [:player :pos] {:x (player/mouse-x-pos)  ;; TODO think about this. Should this be q/mouse-x
-                             :y (q/mouse-y) })))
+   (assoc-in [:player :pos] {:x (player/mouse-x-pos)  ; TODO think about this. Should this be q/mouse-x
+                             :y (q/mouse-y)})
+   (assoc-in [:help] help/text)))
 
 (defn update-game [state]
   ;; threading macro used so the game state gets passed from function to the next
@@ -51,14 +58,15 @@
   [state event]
   (let [updated-state (assoc state :event event)]
     (cond
-      (key-pressed? :h event) (hud/toggle-hud updated-state) ;; toggle hud if h key pressed
       (key-pressed? :c event) (assoc-in updated-state [:style]
-                                        (styles/random-style)) ;; pick new colour
+                                        (styles/random-style)) ; pick new colour
+      (key-pressed? :H event) (hud/toggle-hud updated-state) ; toggle hud if H key pressed
+      (key-pressed? :h event) (help/toggle-help updated-state) ; toggle help if h key pressed
       ;; TODO add more keys. Such as:
       ;; cheat/god mode
       ;; play/pause (this could be space which maybe is (keyword " "))
       ;; quit/new game/menu
-      ;; help
+      ;; high-scores
       ;; actions to spice up the game.
       :else updated-state)))
 
@@ -69,7 +77,8 @@
   (puck/draw-puck state)
   (player/draw-player state)
   (score/draw-score state)
-  (hud/draw-hud state))
+  (hud/draw-hud state)
+  (help/draw-help state))
 
 (defn setup []
   (q/frame-rate 60)

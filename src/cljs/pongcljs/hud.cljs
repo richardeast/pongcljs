@@ -65,6 +65,7 @@
   (cond (true? (get-in state [:hud :show]))
     (let [{boss :boss
            event :event
+           help :help
            paddle :paddle
            player :player
            puck :puck
@@ -74,6 +75,7 @@
       (q/text-size 20)
       ;; (q/text (with-out-str (pprint/pprint state)) 30 30)
       (q/text (str ":event " event ",\n"
+                   ":help " help ",\n"
                   ;; ":boss " boss ",\n"
                   ;; ":paddle " paddle ",\n"
                   ;; ":player " player ",\n"

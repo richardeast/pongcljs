@@ -22,6 +22,13 @@
                      :sharp-stationery    ["#A0EDFF" "#EBF875" "#28CF75" "#FE6B35"]
                      :bright-bokeh        ["#FCF340" "#7FFF00" "#FB33DB" "#0310EA"]})
 
+(defn random-style []
+  (-> color-palettes
+      keys
+      rand-nth))
+
+;; Functions for getting a color when style is taken from the state
+
 (def get-current-style #(get-in % [:style]))
 (def get-current-palette #(get color-palettes (get-current-style %)))
 (defn pick-color [f state]
@@ -32,7 +39,9 @@
 (def color-c (fn [state] (pick-color #(nth % 2) state)))
 (def color-d (fn [state] (pick-color last state)))
 
-(defn random-style []
-  (-> color-palettes
-      keys
-      rand-nth))
+;; Functions for getting a color when style passed in
+(defn style->color
+  "Pick a color from a style -
+   (style->color :bright-bokeh first) ;; gets first color for that style"
+  [k f]
+  (f (k color-palettes)))
