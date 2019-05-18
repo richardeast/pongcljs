@@ -22,6 +22,7 @@
    :help nil
    :hud {:show nil}
    :paddle {:width 100 :height 30}
+   :paused true
    :player {:pos nil}
    :puck {:pos nil
           :direction nil
@@ -43,11 +44,14 @@
 
 (defn update-game [state]
   ;; threading macro used so the game state gets passed from function to the next
-  (-> state
-       score/update-score
-       boss/update-boss
-       player/update-player
-       puck/update-puck))
+  (cond
+    (:paused state) state
+    :else 
+    (-> state
+        score/update-score
+        boss/update-boss
+        player/update-player
+        puck/update-puck)))
 
 (defn key-pressed?
   "has a key been pressed?"
@@ -69,6 +73,24 @@
       ;; high-scores
       ;; actions to spice up the game.
       :else updated-state)))
+
+(defn mouse-clicked
+  "-> new-state"
+  [state event]
+  (let [paused? (:paused state)
+        active-state (get-in state [:help :active-state])]
+    (cond
+      (and paused?
+           (= :left (:button event))
+           (= :welcome active-state)) (-> state
+                                       (assoc-in [:paused] false)
+                                       (assoc-in [:help :active-state] :welcome2))
+      (and paused?
+           (= :left (:button event))) (assoc-in state [:paused] false)
+      (and (not paused?)
+           (= :left (:button event))) (assoc-in state [:paused] true)
+      :else
+      state)))
 
 (defn draw [state]
   ;; threading macro not needed because these functions all draw to the screen. (Therefore not pure.)
@@ -92,5 +114,6 @@
   :setup setup
   :update update-game
   :key-pressed key-pressed
+  :mouse-clicked mouse-clicked
   :draw draw
   :middleware [quil.middleware/fun-mode])
