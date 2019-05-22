@@ -49,7 +49,7 @@
   [state]
   (if (hit-puck? state)
     (->
-     (puck/toggle-direction state)
+     (puck/repulse-puck state)
      (assoc-in [:player :pos] {:x (mouse-x-pos)
                                :y (mouse-y-pos state)}))
     ;;else

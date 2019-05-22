@@ -1,35 +1,66 @@
 (ns pongcljs.opponents.boss
   (:require [quil.core :as q :include-macros true]
-            [pongcljs.styles :as styles]
-            [pongcljs.hex-rgb :as hex]))
+            [pongcljs.hex-rgb :as hex]
+            [pongcljs.puck :as puck]
+            [pongcljs.styles :as styles]))
+
+(defn hit-puck?
+  "They hit the puck if the bottom of the puck touches the player's paddle"
+  [state]
+  (let [{puck :puck
+         paddle :paddle
+         boss :boss} state
+        {:keys [pos height width depth]} puck
+        {x :x y :y} pos
+        puck-bottom (+ y (/ height 2) depth)
+        {boss-x :x boss-y :y} (:pos boss)
+        paddle-height (:height paddle)]
+    (cond
+      (and (> puck-bottom boss-y)
+           (< puck-bottom (+ boss-y (/ paddle-height 2)))
+           (> x (- boss-x (/ (:width paddle) 2)))
+           (< x (+ boss-x (/ (:width paddle) 2)))) true
+      :else false)))
+
+(defn update-boss-state
+  ""
+  [state x y boss-angle speed]
+  (assoc state :boss {:pos {:x x
+                            :y y}
+                      :angle (mod (+ boss-angle speed)
+                                  (* 360 10) ; this mod stops the angle getting too large
+                                  )}))
 
 (defn update-boss [state]
   (let [w (q/width)
         {{boss-angle :angle} :boss} state
         paddle-width (get-in state [:paddle :width])
-        scalar (* w 0.2) ;; size up the paddle so it can run across the board
-        speed 20
+        scalar (* w 0.2) ; size up the paddle so it can run across the board
+        speed 10
 
         x (-> boss-angle
               q/radians
-              (/ 10)                 ;; this affects the number of oscillations it makes
+              (/ 10)                 ; this affects the number of oscillations it makes
               q/sin
-              (* scalar)             ;; size up the paddle so it can run across the board
-              (+ (/ w 2))            ;; moves it across so it can play in the centre of the board
-              (- (/ paddle-width 2)) ;; a slight offset to centre the paddle
+              (* scalar)             ; size up the paddle so it can run across the board
+              (+ (/ w 2))            ; moves it across so it can play in the centre of the board
+              (- (/ paddle-width 2)) ; a slight offset to centre the paddle
               )
 
         y (-> boss-angle
               q/radians
-              (/ 2)      ;; this affects the number of oscillations it makes
+              (/ 2)      ; this affects the number of oscillations it makes
               q/sin
-              (/ 5.5)    ;; the smaller the number the bigger the up and down movement
-              (* scalar) ;; size up the paddle so it can run across the board
-              (+ 110)    ;; move it down
-              )]
-    (assoc state :boss {:pos {:x x
-                              :y y}
-                  :angle (+ boss-angle speed)})))
+              (/ 5.5)    ; the smaller the number the bigger the up and down movement
+              (* scalar) ; size up the paddle so it can run across the board
+              (+ 110)    ; move it down
+              )
+        updated-state (update-boss-state state x y boss-angle speed)
+        ]
+    (cond (hit-puck? updated-state)
+          (puck/attract-puck updated-state)
+      :else
+      updated-state)))
 
 (defn draw-boss
   "The opponent"

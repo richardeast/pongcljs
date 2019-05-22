@@ -8,19 +8,29 @@
 (def away -)    ;; away from the player
 (def towards +) ;; towards the player
 
+(def change-direction #(assoc-in %1 [:puck :direction] %2))
+
+(defn repulse-puck
+  "send puck away from the player's side of the board"
+  [state] (change-direction state away))
+
+(defn attract-puck
+  "send puck towards the player's side of the board"
+  [state] (change-direction state towards))
+
 (defn toggle-direction
   "Update the direction of the puck. If it's going away, flip towards and visa-versa"
   [state]
   (let [d (get-in state [:puck :direction])
         toggle (if (= d away) towards
                               away)]
-   (assoc-in state [:puck :direction] toggle)))
+    (change-direction state toggle)))
 
 (defn speed
   ""
   [state]
   (let [d (get-in state [:puck :direction])]
-    (d 0.7)))
+    (d 1)))
 
 (defn update-y [state]
   (let [y (get-in state [:puck :pos :y])]
