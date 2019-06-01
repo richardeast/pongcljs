@@ -45,6 +45,7 @@
            (< x (+ player-x (/ (:width paddle) 2)))) true
       :else false)))
 
+;; TODO - update state before checking hit.
 (defn update-player
   [state]
   (if (hit-puck? state)

@@ -3,8 +3,8 @@
   (:require [quil.core :as q :include-macros true]
             [quil.middleware :as m]
             [pongcljs.game-world :as game-world]
-            [pongcljs.help :as help]
             [pongcljs.hud :as hud]
+            [pongcljs.messages :as messages]
             [pongcljs.opponents.boss :as boss]
             [pongcljs.player :as player]
             [pongcljs.puck :as puck]
@@ -19,7 +19,12 @@
 (def starting-state
   {:boss {:pos nil
           :angle 0.0}
-   :help nil
+   :messages {:active-state :welcome
+              :lang :eng
+              :style :bright-bokeh
+              :text-size 20
+              :background-transparency 100
+              :languages nil}
    :hud {:show nil}
    :paddle {:width 100 :height 30}
    :paused true
@@ -40,7 +45,7 @@
    (assoc-in [:puck :direction] puck/away)
    (assoc-in [:player :pos] {:x (player/mouse-x-pos)  ; TODO think about this. Should this be q/mouse-x
                              :y (q/mouse-y)})
-   (assoc-in [:help] help/text)))
+   (assoc-in [:messages :languages] messages/text)))
 
 (defn update-game [state]
   ;; threading macro used so the game state gets passed from function to the next
@@ -65,7 +70,7 @@
       (key-pressed? :c event) (assoc-in updated-state [:style]
                                         (styles/random-style)) ; pick new colour
       (key-pressed? :H event) (hud/toggle-hud updated-state) ; toggle hud if H key pressed
-      (key-pressed? :h event) (help/toggle-help updated-state) ; toggle help if h key pressed
+      (key-pressed? :h event) (messages/toggle-help updated-state) ; toggle help if h key pressed
       ;; TODO add more keys. Such as:
       ;; cheat/god mode
       ;; play/pause (this could be space which maybe is (keyword " "))
@@ -78,13 +83,13 @@
   "-> new-state"
   [state event]
   (let [paused? (:paused state)
-        active-state (get-in state [:help :active-state])]
+        active-state (get-in state [:messages :active-state])]
     (cond
       (and paused?
            (= :left (:button event))
            (= :welcome active-state)) (-> state
                                        (assoc-in [:paused] false)
-                                       (assoc-in [:help :active-state] :welcome2))
+                                       (assoc-in [:messages :active-state] :welcome2))
       (and paused?
            (= :left (:button event))) (assoc-in state [:paused] false)
       (and (not paused?)
@@ -100,7 +105,7 @@
   (player/draw-player state)
   (score/draw-score state)
   (hud/draw-hud state)
-  (help/draw-help state))
+  (messages/draw-message state))
 
 (defn setup []
   (q/frame-rate 60)
