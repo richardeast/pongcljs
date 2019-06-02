@@ -4,6 +4,11 @@
             [pongcljs.puck :as puck]
             [pongcljs.styles :as styles]))
 
+;; Some Universal values
+(def degrees-in-circle 360)
+(def oscillations 10)
+(def speed 10)
+
 (defn hit-puck?
   "They hit the puck if the bottom of the puck touches the player's paddle"
   [state]
@@ -14,7 +19,7 @@
         {x :x y :y} pos
         puck-bottom (+ y (/ height 2) depth)
         {boss-x :x boss-y :y} (:pos boss)
-        paddle-height (:height paddle)]
+         paddle-height (:height paddle)]
     (cond
       (and (> puck-bottom boss-y)
            (< puck-bottom (+ boss-y (/ paddle-height 2)))
@@ -28,19 +33,18 @@
   (assoc state :boss {:pos {:x x
                             :y y}
                       :angle (mod (+ boss-angle speed)
-                                  (* 360 10) ; this mod stops the angle getting too large
+                                  (* degrees-in-circle oscillations) ; this mod stops the angle getting too large
                                   )}))
 
 (defn update-boss [state]
   (let [w (q/width)
-        {{boss-angle :angle} :boss} state
+        boss-angle (get-in state [:boss :angle]) 
         paddle-width (get-in state [:paddle :width])
         scalar (* w 0.2) ; size up the paddle so it can run across the board
-        speed 10
 
         x (-> boss-angle
               q/radians
-              (/ 10)                 ; this affects the number of oscillations it makes
+              (/ oscillations)                 ; this affects the number of oscillations it makes
               q/sin
               (* scalar)             ; size up the paddle so it can run across the board
               (+ (/ w 2))            ; moves it across so it can play in the centre of the board

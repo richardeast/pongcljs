@@ -29,14 +29,15 @@
 (defn speed
   ""
   [state]
+  ;;TODO need to add some friction to slow speedy pucks down over time,
+  ;; but never to zero. It still needs some base speed otherwise game would be dull
   (let [d (get-in state [:puck :direction])]
     (d 1)))
 
 (defn update-y [state]
   (let [y (get-in state [:puck :pos :y])]
     (+ y -0.07)
-    (+ y (speed state))
-    ))
+    (+ y (speed state))))
 
 (defn update-x [state]
   (let [x (get-in state [:puck :pos :x])]
