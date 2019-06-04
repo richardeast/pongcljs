@@ -43,6 +43,15 @@
   (let [x (get-in state [:puck :pos :x])]
     (+ x -0.07)))
 
+;;TODO this is too subtle
+(defn perspective-multiplier
+  "Make the puck smaller as it goes away"
+  [y]
+  (* 15
+     (/ y (q/height))))
+
+;;TODO update the width height here.
+;; so it's easier to monitor.
 (defn update-puck [state]
   (let [x (update-x state)
         y (update-y state)]
@@ -54,10 +63,19 @@
   [state]
   (assoc-in state [:puck :pos] (game-world/centre)))
 
+;;TODO remove perspective-multiplier when it's used in update-puck
 (defn draw-puck [state]
   (let [puck (:puck state)
         {{:keys [x y]} :pos} puck
          {h :height w :width d :depth} puck]
     (hex/fill (styles/color-b state))
-    (q/ellipse x y w h)
-    (q/ellipse x (- y d) w h)))
+    (q/ellipse x
+               y
+               (+ w (perspective-multiplier y))
+               (+ h (perspective-multiplier y))
+               )
+    (q/ellipse x (- y d)
+               (+ w (perspective-multiplier y))
+               (+ h (perspective-multiplier y))
+
+               )))
