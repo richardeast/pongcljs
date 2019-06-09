@@ -52,7 +52,7 @@
 
 ;;TODO update the width height here.
 ;; so it's easier to monitor.
-(defn update-puck [state]
+(defn update [state]
   (let [x (update-x state)
         y (update-y state)]
     (assoc-in state [:puck :pos] {:x x

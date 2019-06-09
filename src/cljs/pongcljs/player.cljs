@@ -48,7 +48,7 @@
 ;; TODO - Currently can move so fast as to go through puck
 ;; TODO Need to check starting position, end position and any position in-between hit puck
 ;; TODO if moving faster than the puck need to pass this speed to the puck and push it to the new end position
-(defn update-player
+(defn update
   [state]
   (if (hit-puck? state)
     (->

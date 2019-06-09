@@ -36,7 +36,10 @@
                                   (* degrees-in-circle oscillations) ; this mod stops the angle getting too large
                                   )}))
 
-(defn update-boss [state]
+;; TODO revisit this and consider a Lissajous curve as shown here:
+;; http://quil.info/sketches/show/example_lissajous-table
+;; https://en.wikipedia.org/wiki/Lissajous_curve
+(defn update [state]
   (let [w (q/width)
         boss-angle (get-in state [:boss :angle]) 
         paddle-width (get-in state [:paddle :width])

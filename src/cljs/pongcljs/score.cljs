@@ -21,7 +21,7 @@
        (puck/reset-in-centre)
        (puck/toggle-direction)))
 
-(defn update-score
+(defn update
   "Update the score"
   [state]
   (let [y (get-in state [:puck :pos :y]) ;; when calculating score we only care about up and down the board. :x position is irrelevant.

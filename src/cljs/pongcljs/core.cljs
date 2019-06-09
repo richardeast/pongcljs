@@ -48,15 +48,16 @@
    (assoc-in [:messages :languages] messages/text)))
 
 (defn update-game [state]
-  ;; threading macro used so the game state gets passed from function to the next
+  ;; this maybe better expressed with (When (not (:paused)))
   (cond
     (:paused state) state
-    :else 
+    :else
+    ;; threading macro used so the game state gets passed from function to the next
     (-> state
-        score/update-score
-        boss/update-boss
-        player/update-player
-        puck/update-puck)))
+        score/update
+        boss/update
+        player/update
+        puck/update)))
 
 (defn key-pressed?
   "has a key been pressed?"
