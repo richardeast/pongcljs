@@ -7,8 +7,8 @@
   (/ (q/height) 6))
 
 (defn draw-sky [state]
-  (hex/background (styles/color-d state))
   ;; TODO make the sky more interesting
+  (hex/background (styles/color-d state))
   )
 
 (defn centre

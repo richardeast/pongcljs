@@ -8,9 +8,12 @@ Run `lein figwheel` in your terminal. Wait for a while until you see `Successful
 
 You can use this while developing your sketch. Whenever you save your source files the browser will automatically refresh everything, providing you with quick feedback. For more information about Figwheel, check the [Figwheel repository on GitHub](https://github.com/bhauman/lein-figwheel).
 
-## Publishing your sketch
+## History
+Based on:
+[Pong](https://en.wikipedia.org/wiki/Pong)
+[Air Hockey](https://en.wikipedia.org/wiki/Air_hockey)
+[Shufflepuck Café](https://en.wikipedia.org/wiki/Shufflepuck_Caf%C3%A9)
 
-Before you publish your sketch, run `lein do clean, cljsbuild once optimized`. This will compile your code and run Google Closure Compiler with advanced optimizations. Take `resources/public/index.html` and `resources/public/js/main.js` and upload them to server of your choice.
 
 ## License
 

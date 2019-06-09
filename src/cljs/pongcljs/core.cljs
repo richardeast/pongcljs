@@ -25,7 +25,7 @@
               :text-size 20
               :background-transparency 100
               :languages nil}
-   :hud {:show nil}
+   :hud {:show false}
    :paddle {:width 100 :height 30}
    :paused true
    :player {:pos nil}
@@ -43,8 +43,15 @@
   (->
    (assoc-in starting-state [:puck :pos] (game-world/centre))
    (assoc-in [:puck :direction] puck/away)
-   (assoc-in [:player :pos] {:x (player/mouse-x-pos)  ; TODO think about this. Should this be q/mouse-x
-                             :y (q/mouse-y)})
+   (assoc-in [:player :pos] (let [h (- (q/height) 100)
+                                  w (/ (q/width) 2)]
+                              {:x w
+                               :y h}))
+   (assoc-in [:boss :pos] (let [h (/ (q/height) 5.5)
+                                w (- (/ (q/width) 2)
+                                     (/ (get-in starting-state [:paddle :width]) 2))]
+                            {:x w
+                             :y h}))
    (assoc-in [:messages :languages] messages/text)))
 
 (defn update-game [state]
