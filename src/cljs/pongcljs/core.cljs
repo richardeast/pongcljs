@@ -73,6 +73,7 @@
 (defn key-pressed
   "This function needs to return the state"
   [state event]
+  ;; TODO Bug - key-pressed works in Firefox, but not in Chrome
   (let [updated-state (assoc state :event event)]
     (cond
       (key-pressed? :c event) (assoc-in updated-state [:style]
@@ -107,15 +108,26 @@
 
 (defn draw [state]
   ;; threading macro not needed because these functions all draw to the screen. (Therefore not pure.)
-  (game-world/draw-game-world state)
-  ;; TODO if (< puck-y boss-y) draw-puck then boss, else boss then puck
-  ;; TODO if (< puck-y player-y) draw-puck then player, else player then puck
-  (boss/draw-boss state)
-  (puck/draw-puck state)
-  (player/draw-player state)
-  (score/draw-score state)
-  (hud/draw-hud state)
-  (messages/draw-message state))
+  (let [boss-y (get-in state [:boss :pos :y])
+        puck-y (get-in state [:puck :pos :y])
+        player-y (get-in state [:player :pos :y])]
+    (game-world/draw-game-world state)
+    ;; TODO Find a less verbose way of doing this
+    (when (< puck-y boss-y player-y)
+      (puck/draw-puck state)
+      (boss/draw-boss state)
+      (player/draw-player state))
+    (when (< boss-y puck-y player-y)
+      (boss/draw-boss state)
+      (puck/draw-puck state)
+      (player/draw-player state))
+    (when (< boss-y player-y puck-y)
+      (boss/draw-boss state)
+      (player/draw-player state)
+      (puck/draw-puck state))
+    (score/draw-score state)
+    (hud/draw-hud state)
+    (messages/draw-message state)))
 
 (defn setup []
   (q/frame-rate 60)
