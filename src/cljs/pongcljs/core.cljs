@@ -108,6 +108,8 @@
 (defn draw [state]
   ;; threading macro not needed because these functions all draw to the screen. (Therefore not pure.)
   (game-world/draw-game-world state)
+  ;; TODO if (< puck-y boss-y) draw-puck then boss, else boss then puck
+  ;; TODO if (< puck-y player-y) draw-puck then player, else player then puck
   (boss/draw-boss state)
   (puck/draw-puck state)
   (player/draw-player state)
