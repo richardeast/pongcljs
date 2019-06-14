@@ -14,8 +14,6 @@
 ;;; ToDos
 ;; TODO - https://js.org/ - host the running project
 
- ;; TODO Some states we will want to show or hide the cursor (q/cursor) / (q/no-cursor)
-
 ;; "There's a simple rule that everybody follows - put all your app-state in one place" - David Nolen https://clojurescriptpodcast.com/ S1E1
 ;; TODO This is going to get bigger. Bigger than a screen and it needs to be pulled out of this namespace
 (def starting-state
@@ -109,29 +107,32 @@
       :else
       state)))
 
-(defn draw [state]
-  ;; threading macro not needed because these functions all draw to the screen. (Therefore not pure.)
+(defn order-of-game-objects
+  "Work out the order to draw of the moving objects in the game"
+  [state]
   (let [boss-y (get-in state [:boss :pos :y])
         puck-y (get-in state [:puck :pos :y])
         player-y (get-in state [:player :pos :y])]
+    ;; What if two items are equal? The default is a good state.
+    (cond
+      (< puck-y boss-y player-y) [puck/draw boss/draw player/draw]
+      (< boss-y puck-y player-y) [boss/draw puck/draw player/draw]
+      :else [boss/draw player/draw puck/draw])))
+
+(defn draw [state]
+  ;; threading macro not needed because these functions all draw to the screen. (Therefore not pure.)
+  (let [paused? (:paused state)]
+    (if paused?
+      (q/cursor)
+      (q/no-cursor))
+    ;;TODO have one apply juxt for all the draw elements
     (game-world/draw state)
-    ;; TODO Find a less verbose way of doing this
-    ;; TODO What if they are equal?
-    (when (< puck-y boss-y player-y)
-      (puck/draw state)
-      (boss/draw state)
-      (player/draw state))
-    (when (< boss-y puck-y player-y)
-      (boss/draw state)
-      (puck/draw state)
-      (player/draw state))
-    (when (< boss-y player-y puck-y)
-      (boss/draw state)
-      (player/draw state)
-      (puck/draw state))
-    (score/draw state)
-    (hud/draw state)
-    (messages/draw state)))
+    ((apply juxt
+            (order-of-game-objects state))
+     state)
+    ((juxt score/draw
+           hud/draw
+           messages/draw) state)))
 
 (defn setup []
   (q/frame-rate 60)
