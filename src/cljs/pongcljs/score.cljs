@@ -32,7 +32,7 @@
       :else
        state)))
 
-(defn draw-score
+(defn draw
   "Show the score"
   [state]
   (let [[a b] (:score state)]

@@ -69,7 +69,7 @@
       :else
       updated-state)))
 
-(defn draw-boss
+(defn draw
   "The opponent"
   [state]
   (hex/fill (styles/color-b state))

@@ -64,7 +64,7 @@
   (assoc-in state [:puck :pos] (game-world/centre)))
 
 ;;TODO remove perspective-multiplier when it's used in update-puck
-(defn draw-puck [state]
+(defn draw [state]
   (let [puck (:puck state)
         {{:keys [x y]} :pos} puck
          {h :height w :width d :depth} puck]

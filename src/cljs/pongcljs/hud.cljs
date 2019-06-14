@@ -59,7 +59,7 @@
   (pprint-xy (q/width) (q/height) (- (q/width) 60) (- (q/height) 20)) ;; bottom right
   )
 
-(defn draw-hud
+(defn draw
   "Head-up Display"
   [state]
   (cond (true? (get-in state [:hud :show]))

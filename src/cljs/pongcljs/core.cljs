@@ -14,6 +14,8 @@
 ;;; ToDos
 ;; TODO - https://js.org/ - host the running project
 
+ ;; TODO Some states we will want to show or hide the cursor (q/cursor) / (q/no-cursor)
+
 ;; "There's a simple rule that everybody follows - put all your app-state in one place" - David Nolen https://clojurescriptpodcast.com/ S1E1
 ;; TODO This is going to get bigger. Bigger than a screen and it needs to be pulled out of this namespace
 (def starting-state
@@ -43,6 +45,7 @@
   (->
    (assoc-in starting-state [:puck :pos] (game-world/centre))
    (assoc-in [:puck :direction] puck/away)
+   ;; TODO Give some meaning to these numbers
    (assoc-in [:player :pos] (let [h (- (q/height) 100)
                                   w (/ (q/width) 2)]
                               {:x w
@@ -111,23 +114,24 @@
   (let [boss-y (get-in state [:boss :pos :y])
         puck-y (get-in state [:puck :pos :y])
         player-y (get-in state [:player :pos :y])]
-    (game-world/draw-game-world state)
+    (game-world/draw state)
     ;; TODO Find a less verbose way of doing this
+    ;; TODO What if they are equal?
     (when (< puck-y boss-y player-y)
-      (puck/draw-puck state)
-      (boss/draw-boss state)
-      (player/draw-player state))
+      (puck/draw state)
+      (boss/draw state)
+      (player/draw state))
     (when (< boss-y puck-y player-y)
-      (boss/draw-boss state)
-      (puck/draw-puck state)
-      (player/draw-player state))
+      (boss/draw state)
+      (puck/draw state)
+      (player/draw state))
     (when (< boss-y player-y puck-y)
-      (boss/draw-boss state)
-      (player/draw-player state)
-      (puck/draw-puck state))
-    (score/draw-score state)
-    (hud/draw-hud state)
-    (messages/draw-message state)))
+      (boss/draw state)
+      (player/draw state)
+      (puck/draw state))
+    (score/draw state)
+    (hud/draw state)
+    (messages/draw state)))
 
 (defn setup []
   (q/frame-rate 60)

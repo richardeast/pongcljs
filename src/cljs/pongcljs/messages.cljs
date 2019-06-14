@@ -42,7 +42,7 @@
   [[a b c d]]
   (q/rect a b c d))
 
-(defn draw-message
+(defn draw
   "I draw to screen anything that needs showing to aid the player"
   [{m :messages}]
   (let [current-message (:active-state m)]

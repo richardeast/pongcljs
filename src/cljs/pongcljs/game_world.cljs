@@ -62,7 +62,7 @@
     (q/stroke 0)
     (q/stroke-weight 1)))
 
-(defn draw-game-world [state]
+(defn draw [state]
   (draw-sky state)
   (draw-ground state)
   (draw-tennis-court state))

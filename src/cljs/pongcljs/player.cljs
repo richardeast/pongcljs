@@ -59,7 +59,7 @@
     (assoc-in state [:player :pos] {:x (mouse-x-pos)
                                     :y (mouse-y-pos state)})))
 
-(defn draw-player
+(defn draw
   "The player is a pong bat, but could be a character like Mario or Space Harrier"
   [state]
   (hex/fill (styles/color-a state) 200)
