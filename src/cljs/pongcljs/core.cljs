@@ -19,13 +19,17 @@
 (def starting-state
   {:boss {:pos nil
           :angle 0.0}
+   :camera { ;The view of the game world
+              ;Over-head will be 0
+             :angle 0
+            }
+   :hud {:show false}
    :messages {:active-state :welcome
               :lang :eng
               :style :bright-bokeh
               :text-size 20
               :background-transparency 100
               :languages nil}
-   :hud {:show false}
    :paddle {:width 100 :height 30}
    :paused true
    :player {:pos nil}
@@ -55,6 +59,13 @@
                              :y h}))
    (assoc-in [:messages :languages] messages/text)))
 
+(defn change-camera-angle
+  "Change the current camera. f will be inc or dec"
+  [state f]
+  (let [current-angle (get-in state [:camera :angle])]
+    (assoc-in state [:camera :angle]
+              (f current-angle))))
+
 (defn update-game [state]
   ;; this maybe better expressed with (When (not (:paused)))
   (cond
@@ -81,6 +92,8 @@
                                         (styles/random-style)) ; pick new colour
       (key-pressed? :H event) (hud/toggle-hud updated-state) ; toggle hud if H key pressed
       (key-pressed? :h event) (messages/toggle-help updated-state) ; toggle help if h key pressed
+      (key-pressed? :down event) (change-camera-angle updated-state inc)
+      (key-pressed? :up event) (change-camera-angle updated-state dec)
       ;; TODO add more keys. Such as:
       ;; cheat/god mode
       ;; play/pause (this could be space which maybe is (keyword " "))
