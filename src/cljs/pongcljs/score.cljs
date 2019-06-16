@@ -8,7 +8,7 @@
 
 (defn player-scored?
   "They score if they have gone over the horizon"
-  [y] (< y (game-world/horizon-height)))
+  [y state] (< y (game-world/horizon-height state)))
 
 (defn opponent-scored?
   "They score if they have gone off the bottom of screen"
@@ -27,7 +27,7 @@
   (let [y (get-in state [:puck :pos :y]) ;; when calculating score we only care about up and down the board. :x position is irrelevant.
         [opponent player] (:score state)]
     (cond
-      (player-scored? y) (update-state state [opponent (inc player)])
+      (player-scored? y state) (update-state state [opponent (inc player)])
       (opponent-scored? y) (update-state state [(inc opponent) player])
       :else
        state)))

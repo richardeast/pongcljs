@@ -50,6 +50,25 @@
   (* 15
      (/ y (q/height))))
 
+
+(defn change-camera-angle
+  "Change the current camera. f will be inc or dec"
+  [state f]
+  (let [current-angle (get-in state [:camera :angle])
+        max-angle (get-in state [:camera :max-angle])
+        min-angle (get-in state [:camera :min-angle])
+        ]
+    (if (< min-angle current-angle max-angle)
+      (-> state
+          (assoc-in [:puck :depth]
+                    (* 5 (/ (+ 100 current-angle)
+                            100)))
+          (assoc-in [:puck :height]
+                    (* 25 (/ (- 100 current-angle)
+                             100))))
+      ;else
+      state)))
+
 ;;TODO update the width height here.
 ;; so it's easier to monitor.
 (defn update [state]
@@ -72,10 +91,7 @@
     (q/ellipse x
                y
                (+ w (perspective-multiplier y))
-               (+ h (perspective-multiplier y))
-               )
+               (+ h (perspective-multiplier y)))
     (q/ellipse x (- y d)
                (+ w (perspective-multiplier y))
-               (+ h (perspective-multiplier y))
-
-               )))
+               (+ h (perspective-multiplier y)))))

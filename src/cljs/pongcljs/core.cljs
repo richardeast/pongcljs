@@ -21,7 +21,10 @@
           :angle 0.0}
    :camera { ;The view of the game world
               ;Over-head will be 0
-             :angle 0}
+            :angle 0
+            :max-angle 100
+            :min-angle -100} ;; TODO these min/max angles are a smell. Ought to make it a real angle, like 90 degrees.
+   :game-world {:horizon nil}
    :hud {:show false}
    :messages {:active-state :welcome
               :lang :eng
@@ -43,27 +46,54 @@
 (defn get-starting-state
   "Get the starting state of the application, but inject in additional environmental data."
   []
+  ;; TODO Give some meaning to these numbers
   (->
-   (assoc-in starting-state [:puck :pos] (game-world/centre))
-   (assoc-in [:puck :direction] puck/away)
-   ;; TODO Give some meaning to these numbers
-   (assoc-in [:player :pos] (let [h (- (q/height) 100)
-                                  w (/ (q/width) 2)]
-                              {:x w
-                               :y h}))
+   starting-state
    (assoc-in [:boss :pos] (let [h (/ (q/height) 5.5)
                                 w (- (/ (q/width) 2)
                                      (/ (get-in starting-state [:paddle :width]) 2))]
                             {:x w
                              :y h}))
-   (assoc-in [:messages :languages] messages/text)))
+   (assoc-in [:game-world :horizon] (/ (q/height) 6))
+   (assoc-in [:messages :languages] messages/text)
+   (assoc-in [:player :pos] (let [h (- (q/height) 100)
+                                  w (/ (q/width) 2)]
+                              {:x w
+                               :y h}))
+   (assoc-in [:puck :direction] puck/away)
+   (assoc-in [:puck :pos] (game-world/centre))
+   ))
 
-(defn change-camera-angle
-  "Change the current camera. f will be inc or dec"
+(defn update-camera
+  ""
   [state f]
   (let [current-angle (get-in state [:camera :angle])]
     (assoc-in state [:camera :angle]
               (f current-angle))))
+
+(defn change-camera-angle
+  "Change the current camera angle. f will be inc or dec"
+  [state f]
+  (let [
+        current-angle (get-in state [:camera :angle])
+        max-angle (get-in state [:camera :max-angle])
+        min-angle (get-in state [:camera :min-angle])
+        current-horrizon (get-in state [:game-world :horizon])
+        dec-camera-state (if (and (= f dec)
+                                  (> current-angle min-angle))
+                           (update-camera state dec)
+                           ;else
+                           state)
+        inc-camera-state (if (and (= f inc)
+                                  (< current-angle max-angle))
+                           (update-camera dec-camera-state inc)
+                           ;else
+                           dec-camera-state)]
+    (-> inc-camera-state
+        ;; TODO constrain the movement of the horizon based on min/max camera angle
+        (assoc-in [:game-world :horizon]
+                  (f current-horrizon))
+        (puck/change-camera-angle f))))
 
 (defn update-game [state]
   ;; this maybe better expressed with (When (not (:paused)))
@@ -95,7 +125,6 @@
       (key-pressed? :up event) (change-camera-angle updated-state dec)
       ;; TODO add more keys. Such as:
       ;; cheat/god mode
-      ;; play/pause (this could be space which maybe is (keyword " "))
       ;; quit/new game/menu
       ;; high-scores
       ;; actions to spice up the game.
@@ -163,5 +192,6 @@
   :update update-game
   :key-pressed key-pressed
   :mouse-clicked mouse-clicked
+  ;; TODO :mouse-wheel - Called every time mouse wheel is rotated. Takes 1 argument - wheel
   :draw draw
   :middleware [quil.middleware/fun-mode])

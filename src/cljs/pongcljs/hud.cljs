@@ -77,11 +77,11 @@
       ;; (q/text (with-out-str (pprint/pprint state)) 30 30)
       (q/text (str  ":event " event ",\n"
                     ":camera" camera ",\n"
-                   ":messages " messages ",\n"
+                   ;; ":messages " messages ",\n"
                    ;; ":boss " boss ",\n"
                   ;; ":paddle " paddle ",\n"
                    ;; ":player " player ",\n"
-                   ;; ":puck " puck ",\n"
+                    ":puck-depth " (get-in puck [:depth]) ",\n"
                   ;; ":paddle " paddle ",\n"
                   ;; ":score " score ",\n"
                    ;; ":style " style

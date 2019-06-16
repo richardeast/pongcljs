@@ -3,13 +3,12 @@
             [pongcljs.styles :as styles]
             [pongcljs.hex-rgb :as hex]))
 
-(defn horizon-height []
-  (/ (q/height) 6))
+(defn horizon-height [state]
+  (get-in state [:game-world :horizon]))
 
 (defn draw-sky [state]
   ;; TODO make the sky more interesting
-  (hex/background (styles/color-d state))
-  )
+  (hex/background (styles/color-d state)))
 
 (defn centre
   "get the centre of the game world. This can be used elsewhere, such as resetting the puck."
@@ -22,14 +21,14 @@
 (defn draw-ground [state]
   (hex/fill (styles/color-c state))
   (q/rect 0
-          (horizon-height)
+          (horizon-height state)
           (- (q/width) 0)
           (- (q/height) 0)))
 
-(defn draw-court-quadrant []
+(defn draw-court-quadrant [state]
   (let [h (q/height)
         w (q/width)
-        court-top (horizon-height)
+        court-top (horizon-height state)
         court-quadant {:top-left [(/ w 4.25) court-top]
                        :top-right [(- w (/ w 4.25)) court-top]
                        :bottom-right [w h]
@@ -55,7 +54,7 @@
     (q/fill 0)
     (hex/stroke (styles/color-a state))
     (q/stroke-weight 3)
-    (draw-court-quadrant)
+    (draw-court-quadrant state)
     (q/line 172 (/ h 3.5) 677 (/ h 3.5))
     (q/ellipse centre-x centre-y 200 75)
     (q/line 55 (/ h 1.3) 794 (/ h 1.3))
