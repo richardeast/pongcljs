@@ -21,8 +21,7 @@
           :angle 0.0}
    :camera { ;The view of the game world
               ;Over-head will be 0
-             :angle 0
-            }
+             :angle 0}
    :hud {:show false}
    :messages {:active-state :welcome
               :lang :eng
@@ -120,32 +119,36 @@
       :else
       state)))
 
-(defn order-of-game-objects
+(defn order-of-moving-objects
   "Work out the order to draw of the moving objects in the game"
   [state]
   (let [boss-y (get-in state [:boss :pos :y])
         puck-y (get-in state [:puck :pos :y])
         player-y (get-in state [:player :pos :y])]
-    ;; What if two items are equal? The default is a good state.
     (cond
       (< puck-y boss-y player-y) [puck/draw boss/draw player/draw]
       (< boss-y puck-y player-y) [boss/draw puck/draw player/draw]
+      ;; The default is also a good option when two items are equal.
       :else [boss/draw player/draw puck/draw])))
 
+(defn draw-functions
+  "Returns of vector of the functions to draw everything, in the right order to draw them."
+  [state]
+  (flatten [game-world/draw
+            (order-of-moving-objects state)
+            score/draw
+            hud/draw
+            messages/draw]))
+
 (defn draw [state]
+  ;; Show cursor when game paused.
+  (if (:paused state)
+    (q/cursor)
+    (q/no-cursor))
   ;; threading macro not needed because these functions all draw to the screen. (Therefore not pure.)
-  (let [paused? (:paused state)]
-    (if paused?
-      (q/cursor)
-      (q/no-cursor))
-    ;;TODO have one apply juxt for all the draw elements
-    (game-world/draw state)
-    ((apply juxt
-            (order-of-game-objects state))
-     state)
-    ((juxt score/draw
-           hud/draw
-           messages/draw) state)))
+  ((apply juxt
+          (draw-functions state))
+   state))
 
 (defn setup []
   (q/frame-rate 60)
