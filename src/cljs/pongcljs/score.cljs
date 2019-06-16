@@ -32,6 +32,7 @@
       :else
        state)))
 
+;;TODO make the score for each side, the same colour as the player's bat/paddle
 (defn draw
   "Show the score"
   [state]

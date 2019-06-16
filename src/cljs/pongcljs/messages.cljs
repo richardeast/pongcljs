@@ -10,17 +10,18 @@
             :messages {:welcome {:text "click to start"
                                  :rect [120 500 150 60]
                                  :pos [140 540]}
-                       :welcome2 {:text "h for help"
-                                  :rect [120 500 120 60]
+                       :welcome2 {:text "h toggle help"
+                                  :rect [120 500 170 60]
                                   :pos [140 540]}
                        :help {:text (apply str
                                            (interpose "\n"
                                                      ["h - toggle help"
                                                       "c - random style"
                                                       "H - toggle Headsup Display"
-                                                      "click to pause"]))
-                             :rect [120 450 300 120]
-                             :pos [140 490]}}}])
+                                                      "click to pause"
+                                                      "Up/down key, change angle"]))
+                             :rect [30 450 300 150]
+                             :pos [50 490]}}}])
 
 (defn toggle-help
   "you must return the updated state"
