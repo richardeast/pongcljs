@@ -24,8 +24,10 @@
             :angle 0
             :max-angle 100
             :min-angle -100} ;; TODO these min/max angles are a smell. Ought to make it a real angle, like 90 degrees.
+   :event nil
    :game-world {:horizon nil}
    :hud {:show false}
+   :mouse-wheel nil
    :messages {:active-state :welcome
               :lang :eng
               :style :bright-bokeh
@@ -130,6 +132,12 @@
       ;; actions to spice up the game.
       :else updated-state)))
 
+(defn mouse-wheel-rotate
+  [state m]
+  (assoc state :mouse-wheel m)
+  (cond (= 1 m) (change-camera-angle state inc)
+        :else (change-camera-angle state dec)))
+
 (defn mouse-clicked
   "-> new-state"
   [state event]
@@ -192,6 +200,6 @@
   :update update-game
   :key-pressed key-pressed
   :mouse-clicked mouse-clicked
-  ;; TODO :mouse-wheel - Called every time mouse wheel is rotated. Takes 1 argument - wheel
+  :mouse-wheel mouse-wheel-rotate ; Called every time mouse wheel is rotated. Takes 1 argument - wheel
   :draw draw
   :middleware [quil.middleware/fun-mode])

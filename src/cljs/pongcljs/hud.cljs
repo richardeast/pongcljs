@@ -67,6 +67,7 @@
            camera :camera
            event :event
            messages :messages
+           mouse-wheel :mouse-wheel
            paddle :paddle
            player :player
            puck :puck
@@ -77,6 +78,7 @@
       ;; (q/text (with-out-str (pprint/pprint state)) 30 30)
       (q/text (str  ":event " event ",\n"
                     ":camera" camera ",\n"
+                    ":mouse-wheel" mouse-wheel ",\n"
                    ;; ":messages " messages ",\n"
                    ;; ":boss " boss ",\n"
                   ;; ":paddle " paddle ",\n"
