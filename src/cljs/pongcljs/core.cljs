@@ -183,9 +183,8 @@
     (q/cursor)
     (q/no-cursor))
   ;; threading macro not needed because these functions all draw to the screen. (Therefore not pure.)
-  ((apply juxt
-          (draw-functions state))
-   state))
+  (doseq [f (draw-functions state)]
+    (f state)))
 
 (defn setup []
   (q/frame-rate 60)
