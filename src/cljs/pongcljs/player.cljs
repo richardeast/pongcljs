@@ -1,4 +1,5 @@
 (ns pongcljs.player
+  (:refer-clojure :exclude [update])
   (:require [quil.core :as q :include-macros true]
             [pongcljs.hex-rgb :as hex]
             [pongcljs.puck :as puck]
@@ -60,6 +61,7 @@
 (defn draw
   "The player is a pong bat, but could be a character like Mario or Space Harrier"
   [state]
+  ;; TODO def the color at the top so the Score can call the same color
   (hex/fill (styles/color-a state) 200)
   (let [{x :x y :y} (get-in state [:player :pos])
         {w :width h :height} (get-in state [:paddle])

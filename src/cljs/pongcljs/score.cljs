@@ -1,4 +1,5 @@
 (ns pongcljs.score
+  (:refer-clojure :exclude [update])
   (:require [quil.core :as q :include-macros true]
             [quil.middleware :as m]
             [pongcljs.game-world :as game-world]
@@ -17,7 +18,7 @@
  (defn update-state
    "Update the state based on the effects of someone scoring"
    [state score]
-   (-> (assoc state :score score)
+   (-> (assoc-in state [:score :values] score)
        (puck/reset-in-centre)
        (puck/toggle-direction)))
 
@@ -25,7 +26,7 @@
   "Update the score"
   [state]
   (let [y (get-in state [:puck :pos :y]) ;; when calculating score we only care about up and down the board. :x position is irrelevant.
-        [opponent player] (:score state)]
+        [opponent player] (get-in state [:score :values])]
     (cond
       (player-scored? y state) (update-state state [opponent (inc player)])
       (opponent-scored? y) (update-state state [(inc opponent) player])
@@ -36,7 +37,8 @@
 (defn draw
   "Show the score"
   [state]
-  (let [[a b] (:score state)]
+  (let [[a b] (get-in state [:score :values])]
     (hex/fill (styles/color-b state))
     (q/text-size 40)
+    ;; TODO Use the colors set in Boss and Player namespace
     (q/text (str a  " : " b) 680 60)))

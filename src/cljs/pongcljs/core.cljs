@@ -5,11 +5,10 @@
             [pongcljs.game-world :as game-world]
             [pongcljs.hud :as hud]
             [pongcljs.messages :as messages]
-            [pongcljs.opponents.boss :as boss]
-            [pongcljs.player :as player]
             [pongcljs.puck :as puck]
             [pongcljs.styles :as styles]
-            [pongcljs.score :as score]))
+            [pongcljs.score :as score]
+            [pongcljs.universe :as universe]))
 
 ;;; ToDos
 ;; TODO - https://js.org/ - host the running project
@@ -17,7 +16,10 @@
 ;; "There's a simple rule that everybody follows - put all your app-state in one place" - David Nolen https://clojurescriptpodcast.com/ S1E1
 ;; TODO This is going to get bigger. Bigger than a screen and it needs to be pulled out of this namespace
 (def starting-state
-  {:boss {:pos nil
+  {:boss {:color nil
+          :functions {:update universe/update-boss
+                      :draw universe/draw-boss}
+          :pos nil
           :angle 0.0}
    :camera { ;The view of the game world
               ;Over-head will be 0
@@ -25,24 +27,38 @@
             :max-angle 100
             :min-angle -100} ;; TODO these min/max angles are a smell. Ought to make it a real angle, like 90 degrees.
    :event nil
-   :game-world {:horizon nil}
+   :game-world {:color nil
+                :functions {:update nil
+                            :draw universe/draw-game-world}
+                :horizon nil}
    :hud {:show false}
    :mouse-wheel nil
    :messages {:active-state :welcome
-              :lang :eng
-              :style :bright-bokeh
-              :text-size 20
               :background-transparency 100
-              :languages nil}
+              :functions {:update nil
+                          :draw nil}
+              :lang :eng
+              :languages nil
+              :style :bright-bokeh
+              :text-size 20}
    :paddle {:width 100 :height 30}
    :paused true
-   :player {:pos nil}
-   :puck {:pos nil
+   :player {:color nil
+            :functions {:update universe/update-player
+                        :draw universe/draw-player}
+            :pos nil}
+   :puck {:color nil
+          :functions {:update universe/update-puck
+                      :draw universe/draw-puck}
+          :pos nil
           :direction nil
           :height 25
           :width 50
           :depth 5}
-   :score [0 0]
+   :score {:color nil
+           :functions {:update universe/update-score
+                       :draw universe/draw-score}
+           :values [0 0]}
    :style :algave-glitch})
 
 (defn get-starting-state
@@ -104,10 +120,10 @@
     :else
     ;; threading macro used so the game state gets passed from function to the next
     (-> state
-        score/update
-        boss/update
-        player/update
-        puck/update)))
+        universe/update-score
+        universe/update-boss
+        universe/update-player
+        universe/update-puck)))
 
 (defn key-pressed?
   "has a key been pressed?"
@@ -163,10 +179,15 @@
         puck-y (get-in state [:puck :pos :y])
         player-y (get-in state [:player :pos :y])]
     (cond
-      (< puck-y boss-y player-y) [puck/draw boss/draw player/draw]
-      (< boss-y puck-y player-y) [boss/draw puck/draw player/draw]
+      (< puck-y boss-y player-y) [universe/draw-puck universe/draw-boss
+                                  universe/draw-player]
+      (< boss-y puck-y player-y) [universe/draw-boss
+                                  universe/draw-puck
+                                  universe/draw-player]
       ;; The default is also a good option when two items are equal.
-      :else [boss/draw player/draw puck/draw])))
+      :else [universe/draw-boss
+             universe/draw-player
+             universe/draw-puck])))
 
 (defn draw-functions
   "Returns of vector of the functions to draw everything, in the right order to draw them."

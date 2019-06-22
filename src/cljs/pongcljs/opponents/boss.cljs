@@ -1,4 +1,5 @@
 (ns pongcljs.opponents.boss
+  (:refer-clojure :exclude [update])
   (:require [quil.core :as q :include-macros true]
             [pongcljs.hex-rgb :as hex]
             [pongcljs.puck :as puck]
@@ -72,6 +73,7 @@
 (defn draw
   "The opponent"
   [state]
+  ;; TODO def the color at the top so the Score can call the same color
   (hex/fill (styles/color-b state))
   (let [{x :x y :y} (get-in state [:boss :pos])
         {w :width h :height} (get-in state [:paddle])]

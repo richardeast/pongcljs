@@ -1,4 +1,5 @@
 (ns pongcljs.puck
+  (:refer-clojure :exclude [update])
   (:require [quil.core :as q :include-macros true]
             [quil.middleware :as m]
             [pongcljs.game-world :as game-world]
