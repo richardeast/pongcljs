@@ -31,11 +31,12 @@
 (defn update-boss-state
   ""
   [state x y boss-angle speed]
-  (assoc state :boss {:pos {:x x
-                            :y y}
-                      :angle (mod (+ boss-angle speed)
-                                  (* degrees-in-circle oscillations) ; this mod stops the angle getting too large
-                                  )}))
+  (-> state
+      (assoc-in [:boss :pos] {:x x :y y})
+      (assoc-in [:boss :angle]
+                (mod (+ boss-angle speed)
+                     (* degrees-in-circle oscillations) ; this mod stops the angle getting too large
+                     ))))
 
 ;; TODO revisit this and consider a Lissajous curve as shown here:
 ;; http://quil.info/sketches/show/example_lissajous-table

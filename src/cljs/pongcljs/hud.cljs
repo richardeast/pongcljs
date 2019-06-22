@@ -69,10 +69,10 @@
       (q/text-size 20)
       ;; (q/text (with-out-str (pprint/pprint state)) 30 30)
       (q/text (str  ":event " event ",\n"
-                    ":camera" camera ",\n"
+                   ;; ":camera" camera ",\n"
                     ":mouse-wheel" mouse-wheel ",\n"
                    ;; ":messages " messages ",\n"
-                   ;; ":boss " boss ",\n"
+                    ":boss " boss ",\n"
                   ;; ":paddle " paddle ",\n"
                    ;; ":player " player ",\n"
                     ":puck-depth " (get-in puck [:depth]) ",\n"
