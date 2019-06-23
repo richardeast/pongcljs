@@ -6,6 +6,7 @@
             [pongcljs.hud :as hud]
             [pongcljs.messages :as messages]
             [pongcljs.puck :as puck]
+            [pongcljs.state :as state]
             [pongcljs.styles :as styles]
             [pongcljs.score :as score]
             [pongcljs.universe :as universe]))
@@ -13,63 +14,15 @@
 ;;; ToDos
 ;; TODO - https://js.org/ - host the running project
 
-;; "There's a simple rule that everybody follows - put all your app-state in one place" - David Nolen https://clojurescriptpodcast.com/ S1E1
-;; TODO This is going to get bigger. Bigger than a screen and it needs to be pulled out of this namespace
-(def starting-state
-  {:boss {:color nil
-          :functions {:update universe/update-boss
-                      :draw universe/draw-boss}
-          :pos nil
-          :angle 0.0}
-   :camera { ;The view of the game world
-              ;Over-head will be 0
-            :angle 0
-            :max-angle 100
-            :min-angle -100} ;; TODO these min/max angles are a smell. Ought to make it a real angle, like 90 degrees.
-   :event nil
-   :game-world {:color nil
-                :functions {:update nil
-                            :draw universe/draw-game-world}
-                :horizon nil}
-   :hud {:show false}
-   :mouse-wheel nil
-   :messages {:active-state :welcome
-              :background-transparency 100
-              :functions {:update nil
-                          :draw nil}
-              :lang :eng
-              :languages nil
-              :style :bright-bokeh
-              :text-size 20}
-   :paddle {:width 100 :height 30}
-   :paused true
-   :player {:color nil
-            :functions {:update universe/update-player
-                        :draw universe/draw-player}
-            :pos nil}
-   :puck {:color nil
-          :functions {:update universe/update-puck
-                      :draw universe/draw-puck}
-          :pos nil
-          :direction nil
-          :height 25
-          :width 50
-          :depth 5}
-   :score {:color nil
-           :functions {:update universe/update-score
-                       :draw universe/draw-score}
-           :values [0 0]}
-   :style :algave-glitch})
-
 (defn get-starting-state
   "Get the starting state of the application, but inject in additional environmental data."
   []
   ;; TODO Give some meaning to these numbers
   (->
-   starting-state
+   state/starting-state
    (assoc-in [:boss :pos] (let [h (/ (q/height) 5.5)
                                 w (- (/ (q/width) 2)
-                                     (/ (get-in starting-state [:paddle :width]) 2))]
+                                     (/ (get-in state/starting-state [:paddle :width]) 2))]
                             {:x w
                              :y h}))
    (assoc-in [:game-world :horizon] (/ (q/height) 6))
@@ -79,8 +32,7 @@
                               {:x w
                                :y h}))
    (assoc-in [:puck :direction] puck/away)
-   (assoc-in [:puck :pos] (game-world/centre))
-   ))
+   (assoc-in [:puck :pos] (game-world/centre))))
 
 (defn update-camera
   ""
@@ -92,8 +44,7 @@
 (defn change-camera-angle
   "Change the current camera angle. f will be inc or dec"
   [state f]
-  (let [
-        current-angle (get-in state [:camera :angle])
+  (let [current-angle (get-in state [:camera :angle])
         max-angle (get-in state [:camera :max-angle])
         min-angle (get-in state [:camera :min-angle])
         current-horrizon (get-in state [:game-world :horizon])
@@ -215,11 +166,11 @@
 
 (q/sketch
   :host "pongjs"
-  :size [850 600]
+  :size (get-in state/starting-state [:screen :size])
   :setup setup
   :update update-game
   :key-pressed key-pressed
   :mouse-clicked mouse-clicked
-  :mouse-wheel mouse-wheel-rotate ; Called every time mouse wheel is rotated. Takes 1 argument - wheel
+  :mouse-wheel mouse-wheel-rotate ; Called every time mouse wheel is rotated. 
   :draw draw
   :middleware [quil.middleware/fun-mode])
