@@ -1,5 +1,10 @@
 (ns pongcljs.state
-  (:require [pongcljs.universe :as universe]))
+  (:require [quil.core :as q :include-macros true]
+            [quil.middleware :as m]
+            [pongcljs.game-world :as game-world]
+            [pongcljs.messages :as messages]
+            [pongcljs.puck :as puck]
+            [pongcljs.universe :as universe]))
 
 ;; "There's a simple rule that everybody follows - put all your app-state in one place" - David Nolen https://clojurescriptpodcast.com/ S1E1
 
@@ -22,7 +27,8 @@
             :max-angle 100
             :min-angle -100} ;; TODO these min/max angles are a smell. Ought to make it a real angle, like 90 degrees.
    :event nil
-   :game-world {:color nil
+   :game-world {:pos {:x 0 :y 0}
+                :color nil
                 :functions {:update nil
                             :draw universe/draw-game-world}
                 :horizon nil}
@@ -56,3 +62,24 @@
            :values [0 0]}
    :screen {:size [850 600]}
    :style :algave-glitch})
+
+(defn get-starting-state
+  "Get the starting state of the application, but inject in additional environmental data."
+  []
+  ;; TODO memorize because q/sketch and core.setup both want data from this. We want ot make sure it's the same data and we don't need to repeat this effort.
+  ;; TODO Give some meaning to these numbers
+  (->
+   starting-state
+   (assoc-in [:boss :pos] (let [h (/ (q/height) 5.5)
+                                w (- (/ (q/width) 2)
+                                     (/ (get-in starting-state [:paddle :width]) 2))]
+                            {:x w
+                             :y h}))
+   (assoc-in [:game-world :horizon] (/ (q/height) 6))
+   (assoc-in [:messages :languages] messages/text)
+   (assoc-in [:player :pos] (let [h (- (q/height) 100)
+                                  w (/ (q/width) 2)]
+                              {:x w
+                               :y h}))
+   (assoc-in [:puck :direction] puck/away)
+   (assoc-in [:puck :pos] (game-world/centre))))

@@ -22,3 +22,11 @@
 (def draw-player player/draw)
 (def draw-puck puck/draw)
 (def draw-score score/draw) ; These function names mean something different in Association Football
+
+(defn order-of-draw-functions
+  "Work out the order to draw of the objects in the universe"
+  [state ks]
+  (->>
+   (select-keys state ks)
+   (sort-by (comp :y :pos val)) ; sort by the y position
+   (map (comp :draw :functions val))))

@@ -14,26 +14,6 @@
 ;;; ToDos
 ;; TODO - https://js.org/ - host the running project
 
-(defn get-starting-state
-  "Get the starting state of the application, but inject in additional environmental data."
-  []
-  ;; TODO Give some meaning to these numbers
-  (->
-   state/starting-state
-   (assoc-in [:boss :pos] (let [h (/ (q/height) 5.5)
-                                w (- (/ (q/width) 2)
-                                     (/ (get-in state/starting-state [:paddle :width]) 2))]
-                            {:x w
-                             :y h}))
-   (assoc-in [:game-world :horizon] (/ (q/height) 6))
-   (assoc-in [:messages :languages] messages/text)
-   (assoc-in [:player :pos] (let [h (- (q/height) 100)
-                                  w (/ (q/width) 2)]
-                              {:x w
-                               :y h}))
-   (assoc-in [:puck :direction] puck/away)
-   (assoc-in [:puck :pos] (game-world/centre))))
-
 (defn update-camera
   ""
   [state f]
@@ -94,6 +74,7 @@
       (key-pressed? :up event) (change-camera-angle updated-state dec)
       ;; TODO add more keys. Such as:
       ;; cheat/god mode
+      ;; save game
       ;; quit/new game/menu
       ;; high-scores
       ;; actions to spice up the game.
@@ -123,28 +104,10 @@
       :else
       state)))
 
-(defn order-of-moving-objects
-  "Work out the order to draw of the moving objects in the game"
-  [state]
-  (let [boss-y (get-in state [:boss :pos :y])
-        puck-y (get-in state [:puck :pos :y])
-        player-y (get-in state [:player :pos :y])]
-    (cond
-      (< puck-y boss-y player-y) [universe/draw-puck universe/draw-boss
-                                  universe/draw-player]
-      (< boss-y puck-y player-y) [universe/draw-boss
-                                  universe/draw-puck
-                                  universe/draw-player]
-      ;; The default is also a good option when two items are equal.
-      :else [universe/draw-boss
-             universe/draw-player
-             universe/draw-puck])))
-
 (defn draw-functions
   "Returns of vector of the functions to draw everything, in the right order to draw them."
   [state]
-  (flatten [game-world/draw
-            (order-of-moving-objects state)
+  (flatten [(universe/order-of-draw-functions state [:game-world :puck :player :boss])
             score/draw
             hud/draw
             messages/draw]))
@@ -162,7 +125,7 @@
   (q/frame-rate 60)
   (q/smooth)
   ;; Return the initial state of the game
-  (get-starting-state))
+  (state/get-starting-state))
 
 (q/sketch
   :host "pongjs"
