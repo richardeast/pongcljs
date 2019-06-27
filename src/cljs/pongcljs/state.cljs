@@ -1,5 +1,6 @@
 (ns pongcljs.state
-  (:require [quil.core :as q :include-macros true]
+  (:require [reagent.cookies :as cookies]
+            [quil.core :as q :include-macros true]
             [quil.middleware :as m]
             [pongcljs.game-world :as game-world]
             [pongcljs.messages :as messages]
@@ -8,7 +9,7 @@
 
 ;; "There's a simple rule that everybody follows - put all your app-state in one place" - David Nolen https://clojurescriptpodcast.com/ S1E1
 
-;; "It is better to have 100 functions operate on one data structure than 10 functions on 10 data structures." —Alan Perlis, Epigrams on Programming,
+;; "It is better to have 100 functions operate on one data structure than 10 functions on 10 data structures." — Alan Perlis, Epigrams on Programming,
 ;; https://en.wikipedia.org/wiki/Epigrams_on_Programming
 
 ;; There's a good argument to move this to resources/edn, and slurp it in, but this is a Clients-side ClojureScript project,
@@ -35,12 +36,13 @@
    :hud {:show false}
    :mouse-wheel nil
    :messages {:active-state :welcome
-              :background-transparency 100
+              :background-transparency 100 ;; TODO move to the colors
               :functions {:update nil
                           :draw nil}
               :lang :eng
               :languages nil
               :style :bright-bokeh
+              :colors {:text nil :background nil :border nil}
               :text-size 20}
    :paddle {:width 100 :height 30}
    :paused true
@@ -63,11 +65,22 @@
    :screen {:size [850 600]}
    :style :algave-glitch})
 
-(defn get-starting-state
-  "Get the starting state of the application, but inject in additional environmental data."
+;;; Cookies
+;; Googling "clojurescript cookies" brings reagent-utils to the top
+;; TODO investigate if plain js interop is a better alternative. (. js/document -cookie)
+
+(defn get-cookie [] (cookies/get "state"))
+
+(defn save [state]
+  (cookies/set! "state" state)
+  state) ; make sure we return the state.
+
+(defn populate-starting-state-with-defaults
+  ""
   []
-  ;; TODO memorize because q/sketch and core.setup both want data from this. We want ot make sure it's the same data and we don't need to repeat this effort.
   ;; TODO Give some meaning to these numbers
+  ;; TODO remove the need for the q namespace. Base it on the :screen :size instead
+  ;;      the advantage of this is that this state is independent of quil, so is one less barrier to moving it to another framework.
   (->
    starting-state
    (assoc-in [:boss :pos] (let [h (/ (q/height) 5.5)
@@ -82,4 +95,22 @@
                               {:x w
                                :y h}))
    (assoc-in [:puck :direction] puck/away)
-   (assoc-in [:puck :pos] (game-world/centre))))
+   (assoc-in [:puck :pos] (game-world/centre))
+  ;; (save)
+   ))
+
+(defn reset []
+  (cookies/remove! "state")
+  (populate-starting-state-with-defaults))
+
+(defn get-starting-state
+  "Get the starting state of the application, but inject in additional environmental data."
+  []
+  ;; TODO memorize because q/sketch and core.setup both want data from this. We want ot make sure it's the same data and we don't need to repeat this effort.
+  ;; (cond
+  ;;   (cookies/empty?) (populate-starting-state-with-defaults)
+  ;;   :else (get-cookie))
+  (populate-starting-state-with-defaults)
+
+  )
+

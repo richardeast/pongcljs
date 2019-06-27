@@ -19,8 +19,10 @@
   :license {:name "GPLv3"
             :url "http://www.opensource.org/licenses/GPL-3.0"}
   :dependencies [[org.clojure/clojure "1.10.0"]
+                 [org.clojure/clojurescript "1.10.439"]
                  [quil "2.8.0"]
-                 [org.clojure/clojurescript "1.10.439"]]
+                 [reagent-utils "0.3.3"] ;; for saving cookies
+                 ]
 
   :plugins [[lein-cljsbuild "1.1.7"]
             [lein-figwheel "0.5.18"]]

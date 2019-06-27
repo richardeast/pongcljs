@@ -20,7 +20,8 @@
    [state score]
    (-> (assoc-in state [:score :values] score)
        (puck/reset-in-centre)
-       (puck/toggle-direction)))
+       (puck/toggle-direction)
+       ))
 
 (defn update
   "Update the score"

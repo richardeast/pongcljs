@@ -13,6 +13,8 @@
 
 ;;; ToDos
 ;; TODO - https://js.org/ - host the running project
+;; TODO What namespaces can I remove. game-world
+;; TODO Save game - and pick up from saved game, because then I can be more like Bret Victor, as I can keep the game running as I make changes.
 
 (defn update-camera
   ""
