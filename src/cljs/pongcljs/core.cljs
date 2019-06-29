@@ -136,6 +136,6 @@
   :update update-game
   :key-pressed key-pressed
   :mouse-clicked mouse-clicked
-  :mouse-wheel mouse-wheel-rotate ; Called every time mouse wheel is rotated. 
+  :mouse-wheel mouse-wheel-rotate ; Called every time mouse wheel is rotated.
   :draw draw
   :middleware [quil.middleware/fun-mode])
