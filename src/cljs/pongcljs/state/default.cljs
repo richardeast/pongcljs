@@ -1,4 +1,5 @@
-(ns pongcljs.state.default)
+(ns pongcljs.state.defaults
+  (:require [pongcljs.universe :as universe]))
 
 ;; "It is better to have 100 functions operate on one data structure than 10 functions on 10 data structures." — Alan Perlis, Epigrams on Programming,
 ;; https://en.wikipedia.org/wiki/Epigrams_on_Programming
@@ -6,6 +7,8 @@
 ;; There's a good argument to move this to resources/edn, and slurp it in, but this is a Clients-side ClojureScript project,
 ;; there's too many ways we can read the data. Keeping it in its own namespace keeps it simple and works with Java.
 ;; To read the file in Clojure see: https://github.com/clojure-cookbook/clojure-cookbook/blob/master/04_local-io/4-04_get-local-resource.asciidoc
+
+;; TODO move the universe functions out of here. Inject later to avoid the dependency
 
 (def starting-state
   {:boss {:color nil

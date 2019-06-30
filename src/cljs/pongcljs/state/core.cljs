@@ -1,6 +1,6 @@
 (ns pongcljs.state.core
   (:require [reagent.cookies :as cookies]
-            [pongcljs.state.default :as default]
+            [pongcljs.state.defaults :as default]
             [pongcljs.state.populate :as populate]))
 
 ;; "There's a simple rule that everybody follows - put all your app-state in one place" - David Nolen https://clojurescriptpodcast.com/ S1E1

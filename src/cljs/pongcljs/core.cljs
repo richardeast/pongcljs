@@ -6,7 +6,7 @@
             [pongcljs.hud :as hud]
             [pongcljs.messages :as messages]
             [pongcljs.puck :as puck]
-            [pongcljs.state :as state]
+            [pongcljs.state.core :as state]
             [pongcljs.styles :as styles]
             [pongcljs.score :as score]
             [pongcljs.universe :as universe]))
