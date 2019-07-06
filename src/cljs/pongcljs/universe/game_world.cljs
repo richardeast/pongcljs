@@ -1,4 +1,4 @@
-(ns pongcljs.game-world
+(ns pongcljs.universe.game-world
   (:require [quil.core :as q :include-macros true]
             [pongcljs.styles :as styles]
             [pongcljs.hex-rgb :as hex]))

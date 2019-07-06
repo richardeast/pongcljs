@@ -1,5 +1,5 @@
 (ns pongcljs.state.defaults
-  (:require [pongcljs.universe :as universe]))
+  (:require [pongcljs.universe.core :as universe]))
 
 ;; "It is better to have 100 functions operate on one data structure than 10 functions on 10 data structures." — Alan Perlis, Epigrams on Programming,
 ;; https://en.wikipedia.org/wiki/Epigrams_on_Programming
@@ -12,9 +12,10 @@
 
 (def starting-state
   {:boss {:color nil
-          :functions {:update universe/update-boss
-                      :draw universe/draw-boss}
-          :pos nil
+          :functions {:update nil
+                      :draw nil}
+          :pos {:x 0
+                :y 0}
           :angle 0.0}
    :camera { ;The view of the game world
               ;Over-head will be 0
@@ -27,7 +28,7 @@
                 :functions {:update nil
                             :draw universe/draw-game-world}
                 :horizon nil}
-   :hud {:show false}
+   :hud {:show true}
    :mouse-wheel nil
    :messages {:active-state :welcome
               :background-transparency 100 ;; TODO move to the colors
@@ -43,11 +44,13 @@
    :player {:color nil
             :functions {:update universe/update-player
                         :draw universe/draw-player}
-            :pos nil}
+            :pos {:x 0
+                  :y 0}}
    :puck {:color nil
           :functions {:update universe/update-puck
                       :draw universe/draw-puck}
-          :pos nil
+          :pos {:x 0
+                :y 0}
           :direction nil
           :height 25
           :width 50

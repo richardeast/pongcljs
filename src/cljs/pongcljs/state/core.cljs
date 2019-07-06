@@ -1,7 +1,7 @@
 (ns pongcljs.state.core
   (:require [reagent.cookies :as cookies]
             [pongcljs.state.defaults :as default]
-            [pongcljs.state.populate :as populate]))
+            [pongcljs.state.initiate :as initiate]))
 
 ;; "There's a simple rule that everybody follows - put all your app-state in one place" - David Nolen https://clojurescriptpodcast.com/ S1E1
 (def starting-state default/starting-state)
@@ -18,7 +18,7 @@
 
 (defn reset []
   (cookies/remove! "state")
-  (populate/populate-starting-state-with-defaults starting-state))
+  (initiate/init starting-state))
 
 (defn get-starting-state
   "Get the starting state of the application, but inject in additional environmental data."
@@ -28,4 +28,4 @@
   ;;   (cookies/empty?) (populate-starting-state-with-defaults)
   ;;   :else (get-cookie))
   ;; TODO Can this function be merged with reset
-  (populate/populate-starting-state-with-defaults starting-state))
+  (initiate/init starting-state))

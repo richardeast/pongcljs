@@ -1,8 +1,8 @@
-(ns pongcljs.opponents.boss
+(ns pongcljs.universe.opponents.boss
   (:refer-clojure :exclude [update])
   (:require [quil.core :as q :include-macros true]
             [pongcljs.hex-rgb :as hex]
-            [pongcljs.puck :as puck]
+            [pongcljs.universe.puck :as puck]
             [pongcljs.styles :as styles]))
 
 ;; Some Universal values

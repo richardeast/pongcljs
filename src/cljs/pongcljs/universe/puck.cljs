@@ -1,8 +1,8 @@
-(ns pongcljs.puck
+(ns pongcljs.universe.puck
   (:refer-clojure :exclude [update])
   (:require [quil.core :as q :include-macros true]
             [quil.middleware :as m]
-            [pongcljs.game-world :as game-world]
+            [pongcljs.universe.game-world :as game-world]
             [pongcljs.hex-rgb :as hex]
             [pongcljs.styles :as styles]))
 

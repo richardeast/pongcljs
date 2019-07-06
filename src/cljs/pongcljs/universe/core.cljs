@@ -1,12 +1,12 @@
-(ns pongcljs.universe
+(ns pongcljs.universe.core
   "All the objects, such as the game world, the player, the opponents and the objects live in the universe.
    This namespace is used to simplify the core namespace and to organise the objects in the game/universe"
   (:require [quil.core :as q :include-macros true]
             [quil.middleware :as m]
-            [pongcljs.game-world :as game-world]
-            [pongcljs.opponents.boss :as boss]
-            [pongcljs.player :as player]
-            [pongcljs.puck :as puck]
+            [pongcljs.universe.game-world :as game-world]
+            [pongcljs.universe.opponents.boss :as boss]
+            [pongcljs.universe.player :as player]
+            [pongcljs.universe.puck :as puck]
             [pongcljs.score :as score]))
 
 ;;; Update Functions

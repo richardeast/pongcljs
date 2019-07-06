@@ -6,7 +6,7 @@
 
 ;; Bret Victor - Inventing on Principle https://www.youtube.com/watch?v=PUv66718DII
 ;; TODO Draw the path the puck is going
-;; TODO Draw the path the puck has been 
+;; TODO Draw the path the puck has been
 ;; TODO Draw the opponents path
 ;; TODO Draw the player's past
 

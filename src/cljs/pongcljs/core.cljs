@@ -2,14 +2,15 @@
   "This is the heart of the game. Everything is called from here."
   (:require [quil.core :as q :include-macros true]
             [quil.middleware :as m]
-            [pongcljs.game-world :as game-world]
             [pongcljs.hud :as hud]
             [pongcljs.messages :as messages]
-            [pongcljs.puck :as puck]
             [pongcljs.state.core :as state]
             [pongcljs.styles :as styles]
             [pongcljs.score :as score]
-            [pongcljs.universe :as universe]))
+            [pongcljs.universe.core :as universe]
+            [pongcljs.universe.game-world :as game-world]
+            [pongcljs.universe.puck :as puck]
+            ))
 
 ;;; ToDos
 ;; TODO - https://js.org/ - host the running project
@@ -109,10 +110,13 @@
 (defn draw-functions
   "Returns of vector of the functions to draw everything, in the right order to draw them."
   [state]
-  (flatten [(universe/order-of-draw-functions state [:game-world :puck :player :boss])
+  (flatten [(universe/order-of-draw-functions state [:game-world
+                                                     :puck
+                                                     :player
+                                                     :boss])
             score/draw
-            hud/draw
-            messages/draw]))
+            messages/draw
+            hud/draw]))
 
 (defn draw [state]
   ;; Show cursor when game paused.
