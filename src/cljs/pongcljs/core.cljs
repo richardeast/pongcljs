@@ -7,15 +7,16 @@
             [pongcljs.state.core :as state]
             [pongcljs.styles :as styles]
             [pongcljs.score :as score]
+            ;;TODO We should only require here universe
             [pongcljs.universe.core :as universe]
             [pongcljs.universe.game-world :as game-world]
-            [pongcljs.universe.puck :as puck]
-            ))
+            [pongcljs.universe.puck :as puck]))
 
 ;;; ToDos
 ;; TODO - https://js.org/ - host the running project
 ;; TODO What namespaces can I remove. game-world
 ;; TODO Save game - and pick up from saved game, because then I can be more like Bret Victor, as I can keep the game running as I make changes.
+;; TODO - see  https://photofunia.com/effects/retro-wave for some style ideas
 
 (defn update-camera
   ""

@@ -10,13 +10,18 @@
   ;; TODO make the sky more interesting
   (hex/background (styles/color-d state)))
 
+
 (defn centre
-  "get the centre of the game world. This can be used elsewhere, such as resetting the puck."
-  []
-  (let [h (q/height)
-        w (q/width)]
-    {:x (/ w 2)
-     :y (/ h 2)}))
+  ([]
+   ;; TODO this arity is Deprecated
+   (let [h (q/height)
+         w (q/width)]
+     {:x (/ w 2)
+      :y (/ h 2)}))
+  ([state]
+   (let [[w h] (get-in state [:screen :size])]
+     {:x (/ w 2)
+      :y (/ h 2)})))
 
 (defn draw-ground [state]
   (hex/fill (styles/color-c state))

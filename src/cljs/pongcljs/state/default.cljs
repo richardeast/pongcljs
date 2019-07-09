@@ -1,5 +1,4 @@
-(ns pongcljs.state.defaults
-  (:require [pongcljs.universe.core :as universe]))
+(ns pongcljs.state.defaults)
 
 ;; "It is better to have 100 functions operate on one data structure than 10 functions on 10 data structures." — Alan Perlis, Epigrams on Programming,
 ;; https://en.wikipedia.org/wiki/Epigrams_on_Programming
@@ -7,8 +6,6 @@
 ;; There's a good argument to move this to resources/edn, and slurp it in, but this is a Clients-side ClojureScript project,
 ;; there's too many ways we can read the data. Keeping it in its own namespace keeps it simple and works with Java.
 ;; To read the file in Clojure see: https://github.com/clojure-cookbook/clojure-cookbook/blob/master/04_local-io/4-04_get-local-resource.asciidoc
-
-;; TODO move the universe functions out of here. Inject later to avoid the dependency
 
 (def starting-state
   {:boss {:color nil
@@ -26,7 +23,7 @@
    :game-world {:pos {:x 0 :y 0}
                 :color nil
                 :functions {:update nil
-                            :draw universe/draw-game-world}
+                            :draw nil}
                 :horizon nil}
    :hud {:show true}
    :mouse-wheel nil
@@ -42,13 +39,13 @@
    :paddle {:width 100 :height 30}
    :paused true
    :player {:color nil
-            :functions {:update universe/update-player
-                        :draw universe/draw-player}
+            :functions {:update nil
+                        :draw nil}
             :pos {:x 0
                   :y 0}}
    :puck {:color nil
-          :functions {:update universe/update-puck
-                      :draw universe/draw-puck}
+          :functions {:update nil
+                      :draw nil}
           :pos {:x 0
                 :y 0}
           :direction nil
@@ -56,8 +53,8 @@
           :width 50
           :depth 5}
    :score {:color nil
-           :functions {:update universe/update-score
-                       :draw universe/draw-score}
+           :functions {:update nil
+                       :draw nil}
            :values [0 0]}
    :screen {:size [850 600]}
    :style :algave-glitch})
