@@ -26,7 +26,22 @@
 (defn order-of-draw-functions
   "Work out the order to draw of the objects in the universe"
   [state ks]
-  (->>
-   (select-keys state ks)
-   (sort-by (comp :y :pos val)) ; sort by the y position
-   (map (comp :draw :functions val))))
+  ;;TODO this is temporary until I've moved all the game objects together in one place in the state
+  (let [a (select-keys state ks)
+        b (get-in state [:universe :boss])
+        c (into {:boss b} a)
+        ]
+  ;;  (enable-console-print!)
+  ;;  (println c)
+    (->>
+     c
+     (sort-by (comp :y :pos val)) ; sort by the y position
+     (map (comp :draw :functions val)))))
+
+;; (defn order-of-draw-functions
+;;   "Work out the order to draw of the objects in the universe"
+;;   [state ks]
+;;   (->>
+;;    (select-keys state ks)
+;;    (sort-by (comp :y :pos val)) ; sort by the y position
+;;    (map (comp :draw :functions val))))

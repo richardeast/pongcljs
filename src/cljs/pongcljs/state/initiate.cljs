@@ -17,13 +17,13 @@
         halfway-across (/ screen-width 2)]
     (->
      state
-     (assoc-in [:boss :pos] (let [h (/ screen-height 5.5)
+     (assoc-in [:universe :boss :pos] (let [h (/ screen-height 5.5)
                                   w (- halfway-across
                                        (/ (get-in state [:paddle :width]) 2))]
                               {:x w
                                :y h}))
-     (assoc-in [:boss :functions :draw] universe/draw-boss)
-     (assoc-in [:boss :functions :update] universe/update-boss)
+     (assoc-in [:universe :boss :functions :draw] universe/draw-boss)
+     (assoc-in [:universe :boss :functions :update] universe/update-boss)
      (assoc-in [:game-world :horizon] (/ screen-height 6))
      (assoc-in [:game-world :functions :draw] universe/draw-game-world)
      (assoc-in [:messages :languages] messages/text)

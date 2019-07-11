@@ -14,8 +14,8 @@
   "They hit the puck if the bottom of the puck touches the player's paddle"
   [state]
   (let [{puck :puck
-         paddle :paddle
-         boss :boss} state
+         paddle :paddle} state
+        boss (get-in state [:universe :boss])
         {:keys [pos height width depth]} puck
         {x :x y :y} pos
         puck-bottom (+ y (/ height 2) depth)
@@ -32,8 +32,8 @@
   ""
   [state x y boss-angle speed]
   (-> state
-      (assoc-in [:boss :pos] {:x x :y y})
-      (assoc-in [:boss :angle]
+      (assoc-in [:universe :boss :pos] {:x x :y y})
+      (assoc-in [:universe :boss :angle]
                 (mod (+ boss-angle speed)
                      (* degrees-in-circle oscillations) ; this mod stops the angle getting too large
                      ))))
@@ -43,7 +43,7 @@
 ;; https://en.wikipedia.org/wiki/Lissajous_curve
 (defn update [state]
   (let [w (q/width)
-        boss-angle (get-in state [:boss :angle]) 
+        boss-angle (get-in state [:universe :boss :angle])
         paddle-width (get-in state [:paddle :width])
         scalar (* w 0.2) ; size up the paddle so it can run across the board
 
@@ -76,6 +76,6 @@
   [state]
   ;; TODO def the color at the top so the Score can call the same color
   (hex/fill (styles/color-b state))
-  (let [{x :x y :y} (get-in state [:boss :pos])
+  (let [{x :x y :y} (get-in state [:universe :boss :pos])
         {w :width h :height} (get-in state [:paddle])]
     (q/rect x y w h)))

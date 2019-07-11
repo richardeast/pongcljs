@@ -8,12 +8,7 @@
 ;; To read the file in Clojure see: https://github.com/clojure-cookbook/clojure-cookbook/blob/master/04_local-io/4-04_get-local-resource.asciidoc
 
 (def starting-state
-  {:boss {:color nil
-          :functions {:update nil
-                      :draw nil}
-          :pos {:x 0
-                :y 0}
-          :angle 0.0}
+  {
    :camera { ;The view of the game world
               ;Over-head will be 0
             :angle 0
@@ -57,4 +52,11 @@
                        :draw nil}
            :values [0 0]}
    :screen {:size [850 600]}
-   :style :algave-glitch})
+   :style :algave-glitch
+   :universe {:boss {:color nil
+                     :functions {:update nil
+                                 :draw nil}
+                     :pos {:x 0
+                           :y 0}
+                     :angle 0.0}
+              }})

@@ -69,8 +69,9 @@
   "Head-up Display"
   [state]
   (cond (true? (get-in state [:hud :show]))
-    (let [{:keys [boss camera event messages mouse-wheel paddle
-                  player puck score style]} state]
+        (let [{:keys [camera event messages mouse-wheel paddle
+                      player puck score style]} state
+              boss (get-in state [:universe :boss])]
       ;; TODO comp pprint with-out-str q/text and make cljs.pprint work with java
       (q/text-size 20)
       ;; (q/text (with-out-str (pprint/pprint state)) 30 30)
