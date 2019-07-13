@@ -1,5 +1,6 @@
 (ns pongcljs.state.initiate
-  (:require [pongcljs.messages :as messages]
+  (:require [pongcljs.logging :as log]
+            [pongcljs.messages :as messages]
             [pongcljs.universe.core :as universe]
             [pongcljs.universe.game-world :as game-world]
             [pongcljs.universe.puck :as puck]))
@@ -12,7 +13,7 @@
   ;; TODO Give some meaning to these numbers
   ;; TODO remove the need for the q namespace. Base it on the :screen :size instead
   ;;      the advantage of this is that this state is independent of quil, so is one less barrier to moving it to another framework.
-  (js/console.log "init")
+  (log/info "init application")
   (let [[screen-width screen-height] (get-in state [:screen :size])
         halfway-across (/ screen-width 2)]
     (->
