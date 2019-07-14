@@ -26,7 +26,7 @@
 (defn update
   "Update the score"
   [state]
-  (let [y (get-in state [:puck :pos :y]) ;; when calculating score we only care about up and down the board. :x position is irrelevant.
+  (let [y (get-in state [:universe :puck :pos :y]) ;; when calculating score we only care about up and down the board. :x position is irrelevant.
         [opponent player] (get-in state [:score :values])]
     (cond
       (player-scored? y state) (update-state state [opponent (inc player)])

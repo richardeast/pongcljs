@@ -32,6 +32,7 @@
   "They hit the puck if the bottom of the puck touches the player's paddle"
   [state]
   (let [{:keys [puck paddle player]} state
+        {:keys [puck]} (:universe state)
         {:keys [pos height width depth]} puck
         {x :x y :y} pos
         puck-bottom (+ y (/ height 2) depth)

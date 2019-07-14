@@ -29,7 +29,8 @@
   ;;TODO this is temporary until I've moved all the game objects together in one place in the state
   (let [a (select-keys state ks)
         b (get-in state [:universe :boss])
-        c (into {:boss b} a)
+        p (get-in state [:universe :puck])
+        c (into {:boss b :puck p} a)
         ]
   ;;  (enable-console-print!)
   ;;  (println c)

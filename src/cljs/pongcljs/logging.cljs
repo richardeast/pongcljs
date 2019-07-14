@@ -21,5 +21,5 @@
 (defn info
   "Print simple message to..."
   [text]
-  (enable-console-print!) ;; Doing this every time function is called is a smell.
+  (enable-console-print!) ;; Doing this every time function is called is a smell
   (prn text))

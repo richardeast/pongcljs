@@ -9,7 +9,7 @@
 (def away -)    ;; away from the player
 (def towards +) ;; towards the player
 
-(def change-direction #(assoc-in %1 [:puck :direction] %2))
+(def change-direction #(assoc-in %1 [:universe :puck :direction] %2))
 
 (defn repulse-puck
   "send puck away from the player's side of the board"
@@ -22,7 +22,7 @@
 (defn toggle-direction
   "Update the direction of the puck. If it's going away, flip towards and visa-versa"
   [state]
-  (let [d (get-in state [:puck :direction])
+  (let [d (get-in state [:universe :puck :direction])
         toggle (if (= d away) towards
                               away)]
     (change-direction state toggle)))
@@ -32,16 +32,16 @@
   [state]
   ;;TODO need to add some friction to slow speedy pucks down over time,
   ;; but never to zero. It still needs some base speed otherwise game would be dull
-  (let [d (get-in state [:puck :direction])]
+  (let [d (get-in state [:universe :puck :direction])]
     (d 1)))
 
 (defn update-y [state]
-  (let [y (get-in state [:puck :pos :y])]
+  (let [y (get-in state [:universe :puck :pos :y])]
     (+ y -0.07)
     (+ y (speed state))))
 
 (defn update-x [state]
-  (let [x (get-in state [:puck :pos :x])]
+  (let [x (get-in state [:universe :puck :pos :x])]
     (+ x -0.07)))
 
 ;;TODO this is too subtle
@@ -61,10 +61,10 @@
         ]
     (if (< min-angle current-angle max-angle)
       (-> state
-          (assoc-in [:puck :depth]
+          (assoc-in [:universe :puck :depth]
                     (* 5 (/ (+ 100 current-angle)
                             100)))
-          (assoc-in [:puck :height]
+          (assoc-in [:universe :puck :height]
                     (* 25 (/ (- 100 current-angle)
                              100))))
       ;else
@@ -75,17 +75,17 @@
 (defn update [state]
   (let [x (update-x state)
         y (update-y state)]
-    (assoc-in state [:puck :pos] {:x x
-                                  :y y})))
+    (assoc-in state [:universe :puck :pos] {:x x
+                                            :y y})))
 
 (defn reset-in-centre
   "Puts the puck state in the centre of the board. This function is called outside of this namespace, such as when a player scores."
   [state]
-  (assoc-in state [:puck :pos] (game-world/centre)))
+  (assoc-in state [:universe :puck :pos] (game-world/centre)))
 
 ;;TODO remove perspective-multiplier when it's used in update-puck
 (defn draw [state]
-  (let [puck (:puck state)
+  (let [puck (get-in state [:universe :puck]) 
         {{:keys [x y]} :pos} puck
          {h :height w :width d :depth} puck]
     (hex/fill (styles/color-b state))

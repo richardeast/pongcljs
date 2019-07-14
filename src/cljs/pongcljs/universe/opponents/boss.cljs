@@ -13,9 +13,8 @@
 (defn hit-puck?
   "They hit the puck if the bottom of the puck touches the player's paddle"
   [state]
-  (let [{puck :puck
-         paddle :paddle} state
-        boss (get-in state [:universe :boss])
+  (let [{paddle :paddle} state
+        {:keys [boss puck]} (get-in state [:universe])
         {:keys [pos height width depth]} puck
         {x :x y :y} pos
         puck-bottom (+ y (/ height 2) depth)
