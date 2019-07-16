@@ -48,7 +48,10 @@
                            :functions {:update nil
                                        :draw nil}
                            :horizon nil}
-              :player {:color nil
+              :player {:colors {:stroke-color nil
+                                :stroke-width 3
+                                :fill-color nil
+                                :fill-transparency 200}
                        :functions {:update nil
                                    :draw nil}
                        :pos {:x 0
@@ -61,6 +64,4 @@
                      :direction nil
                      :height 25  ; TODO might be nice for these to be relative to the screen size
                      :width 50
-                     :depth 5}
-              }
-   })
+                     :depth 5}}})

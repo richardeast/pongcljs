@@ -62,12 +62,14 @@
 (defn draw
   "The player is a pong bat, but could be a character like Mario or Space Harrier"
   [state]
-  ;; TODO def the color at the top so the Score can call the same color
-  (hex/fill (styles/color-a state) 200)
-  (let [{x :x y :y} (get-in state [:universe :player :pos])
+  (let [player (get-in state [:universe :player])
+        {:keys [fill-color fill-transparency]} (:colors player)
+        {x :x y :y} (get-in player [:pos])
         {w :width h :height} (get-in state [:paddle])
         x2 (- x (/ w 2)) ;; this adds an offset,
                          ;; otherwise the player paddle would not be at the centre of the mouse.
         y2 (- y (/ h 2)) ;; as above
         ]
+    ;; TODO def the color at the top so the Score can call the same color
+    (hex/fill fill-color fill-transparency)
     (q/rect x2 y2 w h)))
