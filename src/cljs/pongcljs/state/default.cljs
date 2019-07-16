@@ -37,7 +37,10 @@
            :values [0 0]}
    :screen {:size [850 600]} ; TODO might be nice for this to be dynamically adjusted, based on the browser window
    :style :algave-glitch
-   :universe {:boss {:color nil
+   :universe {:boss {:colors {:stroke-color nil
+                              :stroke-width 3
+                              :fill-color nil
+                              :fill-transparency 200}
                      :functions {:update nil
                                  :draw nil}
                      :pos {:x 0

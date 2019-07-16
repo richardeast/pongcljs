@@ -60,6 +60,15 @@
         universe/update-player
         universe/update-puck)))
 
+
+(defn change-colors
+  ""
+  [state]
+  (let [new-style (styles/random-style)]
+    (-> state
+        (assoc-in [:style] new-style)
+        (universe/change-colors new-style))))
+
 (defn key-pressed?
   "has a key been pressed?"
   [k event] (= k (:key event)))
@@ -70,8 +79,7 @@
   ;; TODO Bug - key-pressed works in Firefox, but not in Chrome
   (let [updated-state (assoc state :event event)]
     (cond
-      (key-pressed? :c event) (assoc-in updated-state [:style]
-                                        (styles/random-style)) ; pick new colour
+      (key-pressed? :c event) (change-colors updated-state)
       (key-pressed? :H event) (hud/toggle-hud updated-state) ; toggle hud if H key pressed
       (key-pressed? :h event) (messages/toggle-help updated-state) ; toggle help if h key pressed
       (key-pressed? :down event) (change-camera-angle updated-state inc)

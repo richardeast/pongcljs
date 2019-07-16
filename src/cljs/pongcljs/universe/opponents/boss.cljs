@@ -10,6 +10,13 @@
 (def oscillations 10)
 (def speed 10)
 
+;;TODO This is a bit too like player/change-colors. Refactor
+(defn change-colors
+  ""
+  [state style]
+  (-> state
+      (assoc-in [:universe :boss :colors :fill-color] (styles/style->color style second))))
+
 (defn hit-puck?
   "They hit the puck if the bottom of the puck touches the player's paddle"
   [state]
@@ -73,8 +80,10 @@
 (defn draw
   "The opponent"
   [state]
-  ;; TODO def the color at the top so the Score can call the same color
-  (hex/fill (styles/color-b state))
-  (let [{x :x y :y} (get-in state [:universe :boss :pos])
-        {w :width h :height} (get-in state [:paddle])]
+  ;;TODO this is too much like player/draw refactor
+  (let [boss (get-in state [:universe :boss])
+        {:keys [fill-color fill-transparency]} (:colors boss)
+        {:keys [x y]} (:pos boss)
+        {w :width h :height} (:paddle state)]
+    (hex/fill fill-color fill-transparency)
     (q/rect x y w h)))

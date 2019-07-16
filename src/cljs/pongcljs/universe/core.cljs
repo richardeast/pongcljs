@@ -32,3 +32,10 @@
    (:universe state)
    (sort-by (comp :y :pos val)) ; sort by the y position
    (map (comp :draw :functions val))))
+
+(defn change-colors
+  ""
+  [state style]
+  (-> state
+      (boss/change-colors style)
+      (player/change-colors style)))
