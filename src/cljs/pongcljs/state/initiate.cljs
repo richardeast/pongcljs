@@ -28,10 +28,10 @@
      (assoc-in [:game-world :horizon] (/ screen-height 6))
      (assoc-in [:game-world :functions :draw] universe/draw-game-world)
      (assoc-in [:messages :languages] messages/text)
-     (assoc-in [:player :pos] {:x halfway-across
-                               :y (- screen-height 100)})
-     (assoc-in [:player :functions :update] universe/update-player)
-     (assoc-in [:player :functions :draw] universe/draw-player)
+     (assoc-in [:universe :player :pos] {:x halfway-across
+                                         :y (- screen-height 100)})
+     (assoc-in [:universe :player :functions :update] universe/update-player)
+     (assoc-in [:universe :player :functions :draw] universe/draw-player)
      (assoc-in [:universe :puck :direction] puck/away)
      (assoc-in [:universe :puck :pos] (game-world/centre state))
      (assoc-in [:universe :puck :functions :update] universe/update-puck)

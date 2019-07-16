@@ -36,11 +36,6 @@
               :text-size 20}
    :paddle {:width 100 :height 30} ; TODO might be nice for these to be relative to the screen size
    :paused true
-   :player {:color nil
-            :functions {:update nil
-                        :draw nil}
-            :pos {:x 0
-                  :y 0}}
    :score {:color nil
            :functions {:update nil
                        :draw nil}
@@ -53,6 +48,11 @@
                      :pos {:x 0
                            :y 0}
                      :angle 0.0}
+              :player {:color nil
+                       :functions {:update nil
+                                   :draw nil}
+                       :pos {:x 0
+                             :y 0}}
               :puck {:color nil
                      :functions {:update nil
                                  :draw nil}
@@ -62,9 +62,5 @@
                      :height 25  ; TODO might be nice for these to be relative to the screen size
                      :width 50
                      :depth 5}
-
               }
-
-
-
    })

@@ -30,7 +30,8 @@
   (let [a (select-keys state ks)
         b (get-in state [:universe :boss])
         p (get-in state [:universe :puck])
-        c (into {:boss b :puck p} a)
+        pl (get-in state [:universe :player])
+        c (into {:boss b :puck p :player pl} a)
         ]
   ;;  (enable-console-print!)
   ;;  (println c)

@@ -31,8 +31,8 @@
 (defn hit-puck?
   "They hit the puck if the bottom of the puck touches the player's paddle"
   [state]
-  (let [{:keys [puck paddle player]} state
-        {:keys [puck]} (:universe state)
+  (let [{:keys [paddle]} state
+        {:keys [player puck]} (:universe state)
         {:keys [pos height width depth]} puck
         {x :x y :y} pos
         puck-bottom (+ y (/ height 2) depth)
@@ -53,18 +53,18 @@
   (if (hit-puck? state)
     (->
      (puck/repulse-puck state)
-     (assoc-in [:player :pos] {:x (mouse-x-pos)
-                               :y (mouse-y-pos state)}))
+     (assoc-in [:universe :player :pos] {:x (mouse-x-pos)
+                                         :y (mouse-y-pos state)}))
     ;;else
-    (assoc-in state [:player :pos] {:x (mouse-x-pos)
-                                    :y (mouse-y-pos state)})))
+    (assoc-in state [:universe :player :pos] {:x (mouse-x-pos)
+                                              :y (mouse-y-pos state)})))
 
 (defn draw
   "The player is a pong bat, but could be a character like Mario or Space Harrier"
   [state]
   ;; TODO def the color at the top so the Score can call the same color
   (hex/fill (styles/color-a state) 200)
-  (let [{x :x y :y} (get-in state [:player :pos])
+  (let [{x :x y :y} (get-in state [:universe :player :pos])
         {w :width h :height} (get-in state [:paddle])
         x2 (- x (/ w 2)) ;; this adds an offset,
                          ;; otherwise the player paddle would not be at the centre of the mouse.
