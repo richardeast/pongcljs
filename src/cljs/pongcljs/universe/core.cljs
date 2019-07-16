@@ -29,9 +29,10 @@
   ;;TODO this is temporary until I've moved all the game objects together in one place in the state
   (let [a (select-keys state ks)
         b (get-in state [:universe :boss])
+        g (get-in state [:universe :game-world])
         p (get-in state [:universe :puck])
         pl (get-in state [:universe :player])
-        c (into {:boss b :puck p :player pl} a)
+        c (into {:boss b :game-world g :puck p :player pl} a)
         ]
   ;;  (enable-console-print!)
   ;;  (println c)

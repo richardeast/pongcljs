@@ -19,15 +19,14 @@
     (->
      state
      (assoc-in [:universe :boss :pos] (let [h (/ screen-height 5.5)
-                                  w (- halfway-across
-                                       (/ (get-in state [:paddle :width]) 2))]
-                              {:x w
-                               :y h}))
+                                            w (- halfway-across
+                                                 (/ (get-in state [:paddle :width]) 2))]
+                                        {:x w
+                                         :y h}))
      (assoc-in [:universe :boss :functions :draw] universe/draw-boss)
      (assoc-in [:universe :boss :functions :update] universe/update-boss)
-     (assoc-in [:game-world :horizon] (/ screen-height 6))
-     (assoc-in [:game-world :functions :draw] universe/draw-game-world)
-     (assoc-in [:messages :languages] messages/text)
+     (assoc-in [:universe :game-world :horizon] (/ screen-height 6))
+     (assoc-in [:universe :game-world :functions :draw] universe/draw-game-world)
      (assoc-in [:universe :player :pos] {:x halfway-across
                                          :y (- screen-height 100)})
      (assoc-in [:universe :player :functions :update] universe/update-player)
@@ -36,6 +35,7 @@
      (assoc-in [:universe :puck :pos] (game-world/centre state))
      (assoc-in [:universe :puck :functions :update] universe/update-puck)
      (assoc-in [:universe :puck :functions :draw] universe/draw-puck)
+     (assoc-in [:messages :languages] messages/text)
      (assoc-in [:score :functions :update] universe/update-score)
      (assoc-in [:score :functions :draw] universe/draw-score)
      ;; (save)

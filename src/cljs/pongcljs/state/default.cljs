@@ -18,11 +18,6 @@
             :max-angle 100
             :min-angle -100} ;; TODO these min/max angles are a smell. Ought to make it a real angle, like 90 degrees.
    :event nil
-   :game-world {:pos {:x 0 :y 0}
-                :color nil
-                :functions {:update nil
-                            :draw nil}
-                :horizon nil}
    :hud {:show true}
    :mouse-wheel nil
    :messages {:active-state :welcome
@@ -48,6 +43,11 @@
                      :pos {:x 0
                            :y 0}
                      :angle 0.0}
+              :game-world {:pos {:x 0 :y 0}
+                           :color nil
+                           :functions {:update nil
+                                       :draw nil}
+                           :horizon nil}
               :player {:color nil
                        :functions {:update nil
                                    :draw nil}

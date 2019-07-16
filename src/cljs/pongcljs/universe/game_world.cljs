@@ -4,7 +4,7 @@
             [pongcljs.hex-rgb :as hex]))
 
 (defn horizon-height [state]
-  (get-in state [:game-world :horizon]))
+  (get-in state [:universe :game-world :horizon]))
 
 (defn draw-sky [state]
   ;; TODO make the sky more interesting

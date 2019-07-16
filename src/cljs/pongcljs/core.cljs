@@ -31,7 +31,7 @@
   (let [current-angle (get-in state [:camera :angle])
         max-angle (get-in state [:camera :max-angle])
         min-angle (get-in state [:camera :min-angle])
-        current-horrizon (get-in state [:game-world :horizon])
+        current-horrizon (get-in state [:universe :game-world :horizon])
         dec-camera-state (if (and (= f dec)
                                   (> current-angle min-angle))
                            (update-camera state dec)
@@ -44,7 +44,7 @@
                            dec-camera-state)]
     (-> inc-camera-state
         ;; TODO constrain the movement of the horizon based on min/max camera angle
-        (assoc-in [:game-world :horizon]
+        (assoc-in [:universe :game-world :horizon]
                   (f current-horrizon))
         (puck/change-camera-angle f))))
 
