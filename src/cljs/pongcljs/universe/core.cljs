@@ -14,6 +14,7 @@
 (def update-boss boss/update)
 (def update-player player/update)
 (def update-puck puck/update)
+;; TODO Not sure about score being here. May have to move it.
 (def update-score score/update)
 
 ;;; Draw Functions
@@ -21,30 +22,13 @@
 (def draw-boss boss/draw)
 (def draw-player player/draw)
 (def draw-puck puck/draw)
+;; TODO Not sure about score being here. May have to move it.
 (def draw-score score/draw) ; These function names mean something different in Association Football
 
 (defn order-of-draw-functions
   "Work out the order to draw of the objects in the universe"
-  [state ks]
-  ;;TODO this is temporary until I've moved all the game objects together in one place in the state
-  (let [a (select-keys state ks)
-        b (get-in state [:universe :boss])
-        g (get-in state [:universe :game-world])
-        p (get-in state [:universe :puck])
-        pl (get-in state [:universe :player])
-        c (into {:boss b :game-world g :puck p :player pl} a)
-        ]
-  ;;  (enable-console-print!)
-  ;;  (println c)
-    (->>
-     c
-     (sort-by (comp :y :pos val)) ; sort by the y position
-     (map (comp :draw :functions val)))))
-
-;; (defn order-of-draw-functions
-;;   "Work out the order to draw of the objects in the universe"
-;;   [state ks]
-;;   (->>
-;;    (select-keys state ks)
-;;    (sort-by (comp :y :pos val)) ; sort by the y position
-;;    (map (comp :draw :functions val))))
+  [state]
+  (->>
+   (:universe state)
+   (sort-by (comp :y :pos val)) ; sort by the y position
+   (map (comp :draw :functions val))))

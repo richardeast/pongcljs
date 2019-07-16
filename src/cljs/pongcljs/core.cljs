@@ -111,10 +111,7 @@
 (defn draw-functions
   "Returns of vector of the functions to draw everything, in the right order to draw them."
   [state]
-  (flatten [(universe/order-of-draw-functions state [:game-world
-                                                     :puck
-                                                     :player
-                                                     :boss])
+  (flatten [(universe/order-of-draw-functions state)
             score/draw
             messages/draw
             hud/draw]))
