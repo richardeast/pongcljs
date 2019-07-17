@@ -29,6 +29,10 @@
      (assoc-in [:universe :boss :functions :draw] universe/draw-boss)
      (assoc-in [:universe :boss :functions :update] universe/update-boss)
 
+     (assoc-in [:universe :game-world :items :ground :colors :fill-color] (styles/style->color default-style #(nth % 2)))
+     (assoc-in [:universe :game-world :items :sky :colors :fill-color] (styles/style->color default-style last))
+     (assoc-in [:universe :game-world :items :tennis-court :colors :fill-color] 0)
+     (assoc-in [:universe :game-world :items :tennis-court :colors :stroke-color] (styles/style->color default-style first))
      (assoc-in [:universe :game-world :horizon] (/ screen-height 6))
      (assoc-in [:universe :game-world :functions :draw] universe/draw-game-world)
 

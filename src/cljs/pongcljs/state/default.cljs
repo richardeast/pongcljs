@@ -38,7 +38,7 @@
    :screen {:size [850 600]} ; TODO might be nice for this to be dynamically adjusted, based on the browser window
    :style :algave-glitch
    :universe {:boss {:colors {:stroke-color nil
-                              :stroke-width 3
+                              :stroke-weight 3
                               :fill-color nil
                               :fill-transparency 200}
                      :functions {:update nil
@@ -50,9 +50,15 @@
                            :color nil
                            :functions {:update nil
                                        :draw nil}
-                           :horizon nil}
+                           :horizon nil
+                           :items {:sky {:colors {:fill-color nil}}
+                                   :ground {:colors {:fill-color nil}}
+                                   :tennis-court {:colors {:stroke-color nil
+                                                           :stroke-weight 3
+                                                           :fill-color nil}}
+                                   }}
               :player {:colors {:stroke-color nil
-                                :stroke-width 3
+                                :stroke-weight 3
                                 :fill-color nil
                                 :fill-transparency 200}
                        :functions {:update nil
