@@ -3,12 +3,26 @@
             [pongcljs.styles :as styles]
             [pongcljs.hex-rgb :as hex]))
 
+(defn change-colors
+  [state style]
+  (-> state
+      (assoc-in [:universe :game-world :items
+                 :ground :colors :fill-color] (styles/style->color style #(nth % 2)))
+      (assoc-in [:universe :game-world :items
+                 :tennis-court :colors :fill-color]
+                (styles/style->color style #(nth % 4)))
+      (assoc-in [:universe :game-world :items
+                 :sky :colors :fill-color] (styles/style->color style #(nth % 3)))))
+
+
 (defn horizon-height [state]
   (get-in state [:universe :game-world :horizon]))
 
 (defn draw-sky [state]
   ;; TODO make the sky more interesting
-  (hex/background (styles/color-d state)))
+  (let [sky-color (get-in state [:universe :game-world :items
+                                    :sky :colors :fill-color])]
+    (hex/background sky-color)))
 
 
 (defn centre
@@ -24,15 +38,18 @@
       :y (/ h 2)})))
 
 (defn draw-ground [state]
-  (hex/fill (styles/color-c state))
-  (q/rect 0
-          (horizon-height state)
-          (- (q/width) 0)
-          (- (q/height) 0)))
+  (let [ground-color (get-in state [:universe :game-world :items
+                                    :ground :colors :fill-color])
+        [screen-width screen-height] (get-in state [:screen :size])]
+    (hex/fill ground-color)
+    (q/rect 0
+            (horizon-height state)
+            screen-width
+            screen-height)))
 
+;; TODO Magic Number here. Move to the game-world state.
 (defn draw-court-quadrant [state]
-  (let [h (q/height)
-        w (q/width)
+  (let [[w h] (get-in state [:screen :size])
         court-top (horizon-height state)
         court-quadant {:top-left [(/ w 4.25) court-top]
                        :top-right [(- w (/ w 4.25)) court-top]
@@ -51,20 +68,26 @@
             x3 y3
             x4 y4)))
 
+;; TODO Magic Numbers here. Move to the game-world state.
 (defn draw-tennis-court [state]
-  (let [h (q/height)
-        w (q/width)
-        centre-x (:x (centre))
-        centre-y (:y (centre))]
-    (q/fill 0)
-    (hex/stroke (styles/color-a state))
-    (q/stroke-weight 3)
+  (let [[w h] (get-in state [:screen :size])
+        centre-x (:x (centre state))
+        centre-y (:y (centre state))
+        {:keys [fill-color
+                stroke-color
+                stroke-weight]} (get-in state [:universe :game-world :items
+                                               :tennis-court :colors])]
+    (hex/fill fill-color)
+    (hex/stroke stroke-color)
+    (q/stroke-weight stroke-weight)
     (draw-court-quadrant state)
     (q/line 172 (/ h 3.5) 677 (/ h 3.5))
     (q/ellipse centre-x centre-y 200 75)
     (q/line 55 (/ h 1.3) 794 (/ h 1.3))
+    ;;TODO These have side effects later on. Delete and fix the issue they cause.
     (q/stroke 0)
-    (q/stroke-weight 1)))
+    (q/stroke-weight 1)
+    ))
 
 (defn draw [state]
   (draw-sky state)

@@ -53,7 +53,7 @@
             c1 (color first m)
             c2 (color second m)
             c3 (color #(nth % 2) m)
-            c4 (color last m)
+            c4 (color #(nth % 3) m)
             back-trans (:background-transparency m)
             msg (get-in m [:languages 0 :messages current-message]) ;; TODO change based on language
             msg-pos (:pos msg) ; position of the text to display

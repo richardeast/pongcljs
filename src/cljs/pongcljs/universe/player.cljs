@@ -11,7 +11,6 @@
   (-> state
       (assoc-in [:universe :player :colors :fill-color] (styles/style->color style first))))
 
-
 (defn mouse-x-pos []
   (let [m (q/mouse-x)
         w (q/width)]

@@ -38,4 +38,5 @@
   [state style]
   (-> state
       (boss/change-colors style)
-      (player/change-colors style)))
+      (player/change-colors style)
+      (game-world/change-colors style)))

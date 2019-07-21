@@ -71,15 +71,17 @@
   (cond (true? (get-in state [:hud :show]))
         (let [{:keys [camera event messages mouse-wheel paddle
                       score style]} state
-              {:keys [boss player puck game-world]} (get-in state [:universe])]
+              {:keys [boss player puck game-world]} (get-in state [:universe])
+              {:keys [sky ground tennis-court]} (:items game-world)]
       ;; TODO comp pprint with-out-str q/text and make cljs.pprint work with java
       (q/text-size 20)
       ;; (q/text (with-out-str (pprint/pprint state)) 30 30)
       (q/text (str  ":event " event ",\n"
                    ;; ":camera" camera ",\n"
-                    ":mouse-wheel" mouse-wheel ",\n"
+                   ;;  ":mouse-wheel" mouse-wheel ",\n"
                    ;; ":messages " messages ",\n"
-                    ":boss " boss ",\n"
+                   ;; ":boss " boss ",\n"
+                    ":tennis " tennis-court ",\n"
                   ;; ":paddle " paddle ",\n"
                    ;; ":player " player ",\n"
                     ":puck-depth " (get-in puck [:depth]) ",\n"

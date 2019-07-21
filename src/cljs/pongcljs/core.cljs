@@ -3,6 +3,7 @@
   (:require [quil.core :as q :include-macros true]
             [quil.middleware :as m]
             [pongcljs.hud :as hud]
+            [pongcljs.logging :as log]
             [pongcljs.messages :as messages]
             [pongcljs.state.core :as state]
             [pongcljs.styles :as styles]
@@ -60,10 +61,10 @@
         universe/update-player
         universe/update-puck)))
 
-
 (defn change-colors
   ""
   [state]
+  (log/info "change colors")
   (let [new-style (styles/random-style)]
     (-> state
         (assoc-in [:style] new-style)
