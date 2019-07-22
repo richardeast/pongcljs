@@ -3,6 +3,8 @@
    This namespace is used to simplify the core namespace and to organise the objects in the game/universe"
   (:require [quil.core :as q :include-macros true]
             [quil.middleware :as m]
+            [pongcljs.logging :as log]
+            [pongcljs.styles :as styles]
             [pongcljs.universe.game-world :as game-world]
             [pongcljs.universe.opponents.boss :as boss]
             [pongcljs.universe.player :as player]
@@ -34,9 +36,11 @@
    (map (comp :draw :functions val))))
 
 (defn change-colors
-  ""
-  [state style]
+  [state]
+  (log/info "change colors")
   (-> state
-      (boss/change-colors style)
-      (player/change-colors style)
-      (game-world/change-colors style)))
+      (assoc-in [:style] (styles/random-style))
+      (boss/change-colors)
+      (player/change-colors)
+      (game-world/change-colors)))
+

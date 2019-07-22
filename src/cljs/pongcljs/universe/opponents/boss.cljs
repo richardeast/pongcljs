@@ -12,10 +12,12 @@
 
 ;;TODO This is a bit too like player/change-colors. Refactor
 (defn change-colors
-  ""
-  [state style]
+  [state]
   (-> state
-      (assoc-in [:universe :boss :colors :fill-color] (styles/style->color style second))))
+      (assoc-in [:universe :boss :colors :fill-color]
+                (styles/style->color
+                 (:style state)
+                 second))))
 
 (defn hit-puck?
   "They hit the puck if the bottom of the puck touches the player's paddle"

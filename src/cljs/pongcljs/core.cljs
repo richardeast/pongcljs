@@ -6,7 +6,6 @@
             [pongcljs.logging :as log]
             [pongcljs.messages :as messages]
             [pongcljs.state.core :as state]
-            [pongcljs.styles :as styles]
             [pongcljs.score :as score]
             ;;TODO We should only require here universe
             [pongcljs.universe.core :as universe]
@@ -61,15 +60,6 @@
         universe/update-player
         universe/update-puck)))
 
-(defn change-colors
-  ""
-  [state]
-  (log/info "change colors")
-  (let [new-style (styles/random-style)]
-    (-> state
-        (assoc-in [:style] new-style)
-        (universe/change-colors new-style))))
-
 (defn key-pressed?
   "has a key been pressed?"
   [k event] (= k (:key event)))
@@ -80,7 +70,7 @@
   ;; TODO Bug - key-pressed works in Firefox, but not in Chrome
   (let [updated-state (assoc state :event event)]
     (cond
-      (key-pressed? :c event) (change-colors updated-state)
+      (key-pressed? :c event) (universe/change-colors updated-state)
       (key-pressed? :H event) (hud/toggle-hud updated-state) ; toggle hud if H key pressed
       (key-pressed? :h event) (messages/toggle-help updated-state) ; toggle help if h key pressed
       (key-pressed? :down event) (change-camera-angle updated-state inc)

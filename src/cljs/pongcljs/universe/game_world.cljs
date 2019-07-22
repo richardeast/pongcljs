@@ -3,19 +3,22 @@
             [pongcljs.styles :as styles]
             [pongcljs.hex-rgb :as hex]))
 
+
+(defn set-color
+  [state path color-position]
+  (let [style (:style state)]
+    (assoc-in state
+              (concat [:universe :game-world :items] path)
+              (styles/style->color style #(nth % color-position)))))
+
 (defn change-colors
-  [state style]
-  (-> state
-      (assoc-in [:universe :game-world :items
-                 :ground :colors :fill-color] (styles/style->color style #(nth % 2)))
-      (assoc-in [:universe :game-world :items
-                 :tennis-court :colors :fill-color]
-                (styles/style->color style #(nth % 4)))
-      (assoc-in [:universe :game-world :items
-                 :tennis-court :colors :stroke-color ]
-                (styles/style->color style #(nth % 0)))
-      (assoc-in [:universe :game-world :items
-                 :sky :colors :fill-color] (styles/style->color style #(nth % 3)))))
+  [state]
+  (let [style (:style state)]
+    (-> state
+        (set-color [:ground :colors :fill-color] 2)
+        (set-color [:tennis-court :colors :fill-color] 4)
+        (set-color [:tennis-court :colors :stroke-color] 0)
+        (set-color [:sky :colors :fill-color] 3))))
 
 (defn horizon-height [state]
   (get-in state [:universe :game-world :horizon]))

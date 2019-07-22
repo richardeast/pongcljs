@@ -5,11 +5,14 @@
             [pongcljs.universe.puck :as puck]
             [pongcljs.styles :as styles]))
 
+;;TODO This is a bit too like boss/change-colors. Refactor
 (defn change-colors
-  ""
-  [state style]
+  [state]
   (-> state
-      (assoc-in [:universe :player :colors :fill-color] (styles/style->color style first))))
+      (assoc-in [:universe :player :colors :fill-color]
+                (styles/style->color
+                 (:style state)
+                 first))))
 
 (defn mouse-x-pos []
   (let [m (q/mouse-x)
