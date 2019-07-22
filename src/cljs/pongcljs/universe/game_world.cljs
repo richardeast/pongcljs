@@ -12,8 +12,10 @@
                  :tennis-court :colors :fill-color]
                 (styles/style->color style #(nth % 4)))
       (assoc-in [:universe :game-world :items
+                 :tennis-court :colors :stroke-color ]
+                (styles/style->color style #(nth % 0)))
+      (assoc-in [:universe :game-world :items
                  :sky :colors :fill-color] (styles/style->color style #(nth % 3)))))
-
 
 (defn horizon-height [state]
   (get-in state [:universe :game-world :horizon]))
