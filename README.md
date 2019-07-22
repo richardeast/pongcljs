@@ -16,7 +16,7 @@ There are many games like this.
 The most obvious are:
 * [Pong](https://en.wikipedia.org/wiki/Pong)
 * [Air Hockey](https://en.wikipedia.org/wiki/Air_hockey)
-* [Shufflepuck Café](https://en.wikipedia.org/wiki/Shufflepuck_Caf%C3%A9
+* [Shufflepuck Café](https://en.wikipedia.org/wiki/Shufflepuck_Caf%C3%A9)
 
 ## Why
 
