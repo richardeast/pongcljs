@@ -18,6 +18,7 @@
             :max-angle 100
             :min-angle -100} ;; TODO these min/max angles are a smell. Ought to make it a real angle, like 90 degrees.
    :event nil
+   :frame-rate 60
    :hud {:show true}
    :mouse-wheel nil
    :messages {:active-state :welcome
@@ -74,3 +75,4 @@
                      :height 25  ; TODO might be nice for these to be relative to the screen size
                      :width 50
                      :depth 5}}})
+;; That'll do pig, that'll do

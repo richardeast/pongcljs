@@ -13,22 +13,31 @@
 ; You should have received a copy of the GNU General Public License
 ; along with this code; if not, see <http://www.gnu.org/licenses/>.
 
-(defproject pongcljs "0.1.0-SNAPSHOT"
-  :description "Pong / Air Hockey game in Clojure"
+(defproject pongcljs "0.2.0-SNAPSHOT"
+  :description "Pong / Air Hockey game in ClojureScript"
   :url "http://example.com/FIXME"
   :license {:name "GPLv3"
             :url "http://www.opensource.org/licenses/GPL-3.0"}
   :dependencies [[org.clojure/clojure "1.10.0"]
                  [org.clojure/clojurescript "1.10.439"]
                  [quil "2.8.0"]
-                 [reagent-utils "0.3.3"] ;; for saving cookies
-                 ]
+                 [reagent-utils "0.3.3"]] ; for saving cookies
 
   :plugins [[lein-cljsbuild "1.1.7"]
             [lein-figwheel "0.5.18"]]
+
+  :resource-paths ["resources" "target"]
+  
+ ;; :clean-targets ^{:protect false} ["target/public"]
+  
+  ;; :profiles {:dev {:dependencies [[com.bhauman/figwheel-main "0.2.3"]
+  ;;                                 [com.bhauman/rebel-readline-cljs "0.1.4"]]}}
+
+  ;; :aliases {"fig" ["trampoline" "run" "-m" "figwheel.main"]}
+
   :hooks [leiningen.cljsbuild]
 
-  :clean-targets ^{:protect false} ["resources/public/js"]
+   :clean-targets ^{:protect false} ["resources/public/js"]
   :cljsbuild
   {:builds [; development build with figwheel hot swap
             {:id "development"
@@ -39,7 +48,7 @@
               :output-to "resources/public/js/main.js"
               :output-dir "resources/public/js/development"
               :asset-path "js/development"}}
-            ; minified and bundled build for deployment
+                                        ; minified and bundled build for deployment
             {:id "optimized"
              :source-paths ["src/cljs" "src/cljc"]
              :compiler
@@ -47,4 +56,6 @@
               :output-to "resources/public/js/main.js"
               :output-dir "resources/public/js/optimized"
               :asset-path "js/optimized"
-              :optimizations :advanced}}]})
+              :optimizations :advanced}}]}
+  )
+

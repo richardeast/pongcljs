@@ -37,10 +37,10 @@
 
 (defn change-colors
   [state]
+  ;; TODO Make more like the order-of-draw-functions
   (log/info "change colors")
   (-> state
       (assoc-in [:style] (styles/random-style))
       (boss/change-colors)
       (player/change-colors)
       (game-world/change-colors)))
-

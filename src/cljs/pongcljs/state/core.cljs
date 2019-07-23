@@ -1,23 +1,20 @@
 (ns pongcljs.state.core
-  (:require [reagent.cookies :as cookies]
-            [pongcljs.state.defaults :as default]
-            [pongcljs.state.initiate :as initiate]))
+  (:require [pongcljs.state.defaults :as default]
+            [pongcljs.state.initiate :as initiate]
+            [pongcljs.state.store :as store]))
 
 ;; "There's a simple rule that everybody follows - put all your app-state in one place" - David Nolen https://clojurescriptpodcast.com/ S1E1
 (def starting-state default/starting-state)
 
 ;;; Cookies
-;; Googling "clojurescript cookies" brings reagent-utils to the top
-;; TODO investigate if plain js interop is a better alternative. (. js/document -cookie)
 
-(defn get-cookie [] (cookies/get "state"))
+(defn get-cookie [] (store/get))
 
 (defn save [state]
-  (cookies/set! "state" state)
-  state) ; make sure we return the state.
+  (store/set state))
 
 (defn reset []
-  (cookies/remove! "state")
+  (store/reset)
   (initiate/init starting-state))
 
 (defn get-starting-state

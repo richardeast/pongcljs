@@ -125,14 +125,23 @@
     (f state)))
 
 (defn setup []
-  (q/frame-rate 60)
-  (q/smooth)
-  ;; Return the initial state of the game
-  (state/get-starting-state))
+  (let [state (state/get-starting-state)]
+    (q/smooth)
+    (q/frame-rate (:frame-rate state))
+    ;; Return the initial state of the game
+    state))
+
+(def size
+  ;; "Returns vector
+  ;;  :size - A vector of width and height for the sketch or :fullscreen. Defaults to [500 300].
+  ;;  If you're using :fullscreen you may want to enable present mode using :features [:present].
+  ;;  :fullscreen size works only in Clojure.
+  ;;  In ClojureScript all sketches support fullscreen when you press F11."
+  (get-in state/starting-state [:screen :size]) )
 
 (q/sketch
   :host "pongjs"
-  :size (get-in state/starting-state [:screen :size])
+  :size  size
   :setup setup
   :update update-game
   :key-pressed key-pressed

@@ -29,7 +29,6 @@
                                     :sky :colors :fill-color])]
     (hex/background sky-color)))
 
-
 (defn centre
   ([]
    ;; TODO this arity is Deprecated
