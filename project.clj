@@ -24,7 +24,7 @@
                  [reagent-utils "0.3.3"]] ; for saving cookies
 
   :plugins [[lein-cljsbuild "1.1.7"]
-            [lein-figwheel "0.5.18"]]
+            [lein-figwheel "0.5.19"]]
 
   :resource-paths ["resources" "target"]
   
@@ -32,6 +32,10 @@
   
   ;; :profiles {:dev {:dependencies [[com.bhauman/figwheel-main "0.2.3"]
   ;;                                 [com.bhauman/rebel-readline-cljs "0.1.4"]]}}
+  :profiles {:dev {:dependencies [[figwheel-sidecar "0.5.19"]]
+                  ;; :source-paths ["cljs_src"]
+
+                   }}
 
   ;; :aliases {"fig" ["trampoline" "run" "-m" "figwheel.main"]}
 

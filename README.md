@@ -3,7 +3,7 @@
 A game of Pong / Air Hockey, written in Clojure/Script
 
 ## Usage
-I will have a playable version on line eventually. If you can't wait until then, use the following instructions -
+I will have a playable version on-line eventually. If you can't wait until then, use the following instructions -
 
 To run locally, you must have [Clojure](https://clojure.org/) and [Leiningen](https://leiningen.org/) installed
 Clone from git. 
