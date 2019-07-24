@@ -45,7 +45,7 @@
   :cljsbuild
   {:builds [; development build with figwheel hot swap
             {:id "development"
-             :source-paths ["src/cljs" "src/cljc"]
+             :source-paths ["src/cljs" "src/cljc" "test/cljc" "test/cljs"]
              :figwheel true
              :compiler
              {:main "pongcljs.core"

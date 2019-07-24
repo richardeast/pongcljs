@@ -8,15 +8,15 @@
 
 ;; TODO Make Clojure/ClojureScript neutral
 
+(def cookie-name "state")
 (defn echo [x] x)
 
-(defn get [] (cookies/get "state"))
+(defn get [] (cookies/get cookie-name))
 
 (defn set [state]
-  (cookies/set! "state" state)
+  (cookies/set! cookie-name state)
   state) ; make sure we return the state.
 
-(defn reset [] (cookies/remove! "state"))
+(defn reset [] (cookies/remove! cookie-name))
 
-(echo "Ho")
 

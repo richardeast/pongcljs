@@ -7,7 +7,8 @@ I will have a playable version on-line eventually. If you can't wait until then,
 
 To run locally, you must have [Clojure](https://clojure.org/) and [Leiningen](https://leiningen.org/) installed
 Clone from git. 
-Run `lein figwheel` in your terminal. Wait for a while until you see `Successfully compiled "resources/public/js/main.js"**. Open [localhost:3449](http://localhost:3449) in your browser.
+Run `lein figwheel` in your terminal. Wait for a while until you see `Successfully compiled "resources/public/js/main.js".
+Open [localhost:3449](http://localhost:3449) in your browser.
 
 For more information about Figwheel, check the [Figwheel repository on GitHub](https://github.com/bhauman/lein-figwheel).
 
