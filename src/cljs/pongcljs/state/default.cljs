@@ -13,7 +13,7 @@
 
 (def starting-state
   {:camera { ;The view of the game world
-              ;Over-head will be 0
+             ;Over-head will be 0
             :angle 0
             :max-angle 100
             :min-angle -100} ;; TODO these min/max angles are a smell. Ought to make it a real angle, like 90 degrees.
@@ -22,9 +22,8 @@
    :hud {:show true}
    :mouse-wheel nil
    :messages {:active-state :welcome
-              :background-transparency 100 ;; TODO move to the colors
-              :functions {:update nil
-                          :draw nil}
+              :background-transparency 100 ; TODO move to the colors
+              :functions {:draw nil}
               :lang :eng
               :languages nil
               :style :bright-bokeh
@@ -33,8 +32,7 @@
    :paddle {:width 100 :height 30} ; TODO might be nice for these to be relative to the screen size
    :paused true
    :score {:color nil
-           :functions {:update nil
-                       :draw nil}
+           :functions {:draw nil}
            :values [0 0]}
    :screen {:size [850 600]} ; TODO might be nice for this to be dynamically adjusted, based on the browser window
    :style :algave-glitch
@@ -42,36 +40,31 @@
                               :stroke-weight 3
                               :fill-color nil
                               :fill-transparency 200}
-                     :functions {:update nil
-                                 :draw nil}
+                     :functions {:draw nil}
                      :pos {:x 0
                            :y 0}
                      :angle 0.0}
               :game-world {:pos {:x 0 :y 0}
                            :color nil
-                           :functions {:update nil
-                                       :draw nil}
+                           :functions {:draw nil}
                            :horizon nil
                            :items {:sky {:colors {:fill-color nil}}
                                    :ground {:colors {:fill-color nil}}
                                    :tennis-court {:colors {:stroke-color nil
                                                            :stroke-weight 3
-                                                           :fill-color nil}}
-                                   }}
+                                                           :fill-color nil}}}}
               :player {:colors {:stroke-color nil
                                 :stroke-weight 3
                                 :fill-color nil
                                 :fill-transparency 200}
-                       :functions {:update nil
-                                   :draw nil}
+                       :functions {:draw nil}
                        :pos {:x 0
                              :y 0}}
               :puck {:color nil
-                     :functions {:update nil
-                                 :draw nil}
+                     :functions {:draw nil
+                                 :direction :away}
                      :pos {:x 0
                            :y 0}
-                     :direction nil
                      :height 25  ; TODO might be nice for these to be relative to the screen size
                      :width 50
                      :depth 5}}})

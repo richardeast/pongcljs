@@ -4,20 +4,33 @@
 
 ;; lein test :only pongcljs.state.store-test/call-the-store
 
-(deftest callstore
-  (testing "can call the store"
-    (is (= "hello" (store/echo "hello")))))
+(def state {:thing "cat"})
 
 (deftest settingState
-  (testing "save a map to a cookie")
-  (let [state {:thing "cat"}]
+  (testing "save a map to a cookie"
     (is (= state (store/set state)))))
 
 (deftest gettingState
-  (testing "read a map from a cookie")
-  (let [state {:thing "cat"}
-        s (store/set state)]
-    (is (= state (store/get)))))
+  (testing "read a map from a cookie"
+    (let [s (store/set state)
+          g (store/get)]
+      (is (= s g)))))
 
+(deftest deleteState
+  (testing "delete a cookie"
+    (let [s (store/set state)
+          g (store/get)
+          d (store/delete)]
+      (is (= s g))
+      (is (= d nil)))))
+
+(deftest isStateStored
+  (testing "check if state is stored"
+    (let [s (store/set state)
+          e1 (store/empty?)
+          d (store/delete)
+          e2 (store/empty?)]
+      (is (false? e1))
+      (is (true? e2)))))
 
 ;; (run-tests)

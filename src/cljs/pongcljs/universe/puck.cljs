@@ -6,25 +6,25 @@
             [pongcljs.hex-rgb :as hex]
             [pongcljs.styles :as styles]))
 
-(def away -)    ;; away from the player
-(def towards +) ;; towards the player
+(def directions {:away -      ; away from the player
+                 :towards +}) ; towards the player
 
-(def change-direction #(assoc-in %1 [:universe :puck :direction] %2))
+(def change-direction #(assoc-in %1 [:universe :puck :functions :direction] %2))
 
 (defn repulse-puck
   "send puck away from the player's side of the board"
-  [state] (change-direction state away))
+  [state] (change-direction state :away))
 
 (defn attract-puck
   "send puck towards the player's side of the board"
-  [state] (change-direction state towards))
+  [state] (change-direction state :towards))
 
 (defn toggle-direction
   "Update the direction of the puck. If it's going away, flip towards and visa-versa"
   [state]
-  (let [d (get-in state [:universe :puck :direction])
-        toggle (if (= d away) towards
-                              away)]
+  (let [direction (get-in state [:universe :puck :functions :direction])
+        toggle (if (= direction :away) :towards
+                                       :away)]
     (change-direction state toggle)))
 
 (defn speed
@@ -32,8 +32,9 @@
   [state]
   ;;TODO need to add some friction to slow speedy pucks down over time,
   ;; but never to zero. It still needs some base speed otherwise game would be dull
-  (let [d (get-in state [:universe :puck :direction])]
-    (d 1)))
+  (let [d (get-in state [:universe :puck :functions :direction])
+        f (d directions)]
+    (f 1)))
 
 (defn update-y [state]
   (let [y (get-in state [:universe :puck :pos :y])]

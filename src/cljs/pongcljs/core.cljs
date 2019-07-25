@@ -18,6 +18,8 @@
 ;; TODO Save game - and pick up from saved game, because then I can be more like Bret Victor, as I can keep the game running as I make changes.
 ;; TODO - see  https://photofunia.com/effects/retro-wave for some style ideas
 
+;; TODO - 5.17: Introduction to Matter.js - The Nature of Code https://www.youtube.com/watch?v=urR596FsU68
+
 (defn update-camera
   ""
   [state f]
@@ -52,13 +54,7 @@
   ;; this maybe better expressed with (When (not (:paused)))
   (cond
     (:paused state) state
-    :else
-    ;; threading macro used so the game state gets passed from function to the next
-    (-> state
-        universe/update-score
-        universe/update-boss
-        universe/update-player
-        universe/update-puck)))
+    :else (universe/update state)))
 
 (defn key-pressed?
   "has a key been pressed?"

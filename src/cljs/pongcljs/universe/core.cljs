@@ -1,6 +1,7 @@
 (ns pongcljs.universe.core
   "All the objects, such as the game world, the player, the opponents and the objects live in the universe.
    This namespace is used to simplify the core namespace and to organise the objects in the game/universe"
+  (:refer-clojure :exclude [update])
   (:require [quil.core :as q :include-macros true]
             [quil.middleware :as m]
             [pongcljs.logging :as log]
@@ -13,11 +14,14 @@
 
 ;;; Update Functions
 ;; (def update-game-world game-world/update) ; TODO
-(def update-boss boss/update)
-(def update-player player/update)
-(def update-puck puck/update)
-;; TODO Not sure about score being here. May have to move it.
-(def update-score score/update)
+
+(defn update [state]
+  ;; threading macro used so the game state gets passed from function to the next
+  (-> state
+      score/update
+      boss/update
+      player/update
+      puck/update))
 
 ;;; Draw Functions
 (def draw-game-world game-world/draw)
