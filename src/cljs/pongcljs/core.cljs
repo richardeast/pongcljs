@@ -65,19 +65,19 @@
   [state event]
   ;; TODO Bug - key-pressed works in Firefox, but not in Chrome
   (let [updated-state (assoc state :event event)]
-    (cond
-      (key-pressed? :c event) (universe/change-colors updated-state)
-      (key-pressed? :H event) (hud/toggle-hud updated-state) ; toggle hud if H key pressed
-      (key-pressed? :h event) (messages/toggle-help updated-state) ; toggle help if h key pressed
-      (key-pressed? :down event) (change-camera-angle updated-state inc)
-      (key-pressed? :up event) (change-camera-angle updated-state dec)
+    (condp key-pressed? event
+      :c (universe/change-colors updated-state)
+      :H (hud/toggle-hud updated-state) ; toggle hud if H key pressed
+      :h (messages/toggle-help updated-state) ; toggle help if h key pressed
+      :down (change-camera-angle updated-state inc)
+      :up (change-camera-angle updated-state dec)
       ;; TODO add more keys. Such as:
       ;; cheat/god mode
       ;; save game
       ;; quit/new game/menu
       ;; high-scores
       ;; actions to spice up the game.
-      :else updated-state)))
+      updated-state)))
 
 (defn mouse-wheel-rotate
   [state m]
