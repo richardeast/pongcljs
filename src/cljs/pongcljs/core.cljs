@@ -72,6 +72,7 @@
       :h (messages/toggle-help updated-state) ; toggle help if h key pressed
       :down (change-camera-angle updated-state inc)
       :up (change-camera-angle updated-state dec)
+      :r (state/reset) ; Reset the game
       ;; TODO add more keys. Such as:
       ;; cheat/god mode
       ;; save game

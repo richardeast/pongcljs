@@ -2,9 +2,7 @@
   (:require [pongcljs.logging :as log]
             [pongcljs.messages :as messages]
             [pongcljs.styles :as styles]
-            [pongcljs.universe.core :as universe]
-            [pongcljs.universe.game-world :as game-world]
-            [pongcljs.universe.puck :as puck]))
+            [pongcljs.universe.game-world :as game-world]))
 
 (defn init
   "returns state"

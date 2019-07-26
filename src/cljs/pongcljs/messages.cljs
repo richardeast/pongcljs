@@ -18,10 +18,11 @@
                                                      ["h - toggle help"
                                                       "c - random style"
                                                       "H - toggle Headsup Display"
+                                                      "r - restart"
                                                       "click to pause"
                                                       "Up/down key, change angle"]))
-                             :rect [30 450 300 150]
-                             :pos [50 490]}}}])
+                             :rect [130 350 300 200]
+                             :pos [150 390]}}}])
 
 (defn toggle-help
   "you must return the updated state"

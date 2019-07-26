@@ -18,7 +18,7 @@
             :max-angle 100
             :min-angle -100} ;; TODO these min/max angles are a smell. Ought to make it a real angle, like 90 degrees.
    :event nil
-   :frame-rate 60
+   :frame-rate 25
    :hud {:show true}
    :mouse-wheel nil
    :messages {:active-state :welcome

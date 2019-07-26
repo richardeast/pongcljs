@@ -7,6 +7,8 @@
 ;; "There's a simple rule that everybody follows - put all your app-state in one place" - David Nolen https://clojurescriptpodcast.com/ S1E1
 (def starting-state default/starting-state)
 
+(def save store/set)
+
 (defn reset []
   (log/info "Resetting game")
   (store/delete)
@@ -20,9 +22,9 @@
   ;; TODO memorize because q/sketch and core.setup both want data from this. We want to make sure it's the same data and we don't need to repeat this effort.
   (log/info "get starting state")
   (cond
-    (store/empty?) (reset)
+    ;; TODO remove not when state saving has been fixed.
+    (not (store/empty?)) (reset)
     :else
     (let [state (store/get)]
       (log/info "reading state from store")
       state)))
-

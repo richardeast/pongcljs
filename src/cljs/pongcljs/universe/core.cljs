@@ -5,12 +5,13 @@
   (:require [quil.core :as q :include-macros true]
             [quil.middleware :as m]
             [pongcljs.logging :as log]
+            [pongcljs.score :as score]
+            [pongcljs.state.core :as state]
             [pongcljs.styles :as styles]
             [pongcljs.universe.game-world :as game-world]
             [pongcljs.universe.opponents.boss :as boss]
             [pongcljs.universe.player :as player]
-            [pongcljs.universe.puck :as puck]
-            [pongcljs.score :as score]))
+            [pongcljs.universe.puck :as puck]))
 
 ;;; Update Functions
 ;; (def update-game-world game-world/update) ; TODO
@@ -37,6 +38,7 @@
   (->>
    (:universe state)
    (sort-by (comp :y :pos val)) ; sort by the y position
+   ;; TODO Can I just select keys instead?
    (map (comp :draw :functions val))))
 
 (defn change-colors
@@ -47,4 +49,5 @@
       (assoc-in [:style] (styles/random-style))
       (boss/change-colors)
       (player/change-colors)
-      (game-world/change-colors)))
+      (game-world/change-colors)
+      (state/save)))
