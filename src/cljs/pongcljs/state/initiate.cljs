@@ -26,23 +26,22 @@
                                                  (/ (get-in state [:paddle :width]) 2))]
                                         {:x w
                                          :y h}))
-     (assoc-in [:universe :boss :functions :draw] universe/draw-boss) ; TODO use a keyword
 
      (assoc-in [:universe :game-world :items :ground :colors :fill-color] (styles/style->color default-style #(nth % 2)))
      (assoc-in [:universe :game-world :items :sky :colors :fill-color] (styles/style->color default-style #(nth % 3)))
      (assoc-in [:universe :game-world :items :tennis-court :colors :fill-color] (styles/style->color default-style #(nth % 4)))
      (assoc-in [:universe :game-world :items :tennis-court :colors :stroke-color] (styles/style->color default-style first))
      (assoc-in [:universe :game-world :horizon] (/ screen-height 6))
-     (assoc-in [:universe :game-world :functions :draw] universe/draw-game-world) ; TODO use a keyword
+     (assoc-in [:universe :boss :functions :draw] :boss)
+     (assoc-in [:universe :game-world :functions :draw] :game-world)
+     (assoc-in [:universe :player :functions :draw] :player)
+     (assoc-in [:universe :puck :functions :draw] :puck)
 
      (assoc-in [:universe :player :colors :fill-color] (styles/style->color default-style first))
      (assoc-in [:universe :player :pos] {:x halfway-across
                                          :y (- screen-height 100)})
-     (assoc-in [:universe :player :functions :draw] universe/draw-player) ; TODO use a keyword
 
      (assoc-in [:universe :puck :pos] (game-world/centre state))
-     (assoc-in [:universe :puck :functions :draw] universe/draw-puck) ; TODO use a keyword
      (assoc-in [:messages :languages] messages/text)
-     (assoc-in [:score :functions :draw] universe/draw-score) ; TODO use a keyword
      ;; (save)
      )))

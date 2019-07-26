@@ -64,6 +64,7 @@
   "This function needs to return the state"
   [state event]
   ;; TODO Bug - key-pressed works in Firefox, but not in Chrome
+  ;; I think this is down to a browser plugin.
   (let [updated-state (assoc state :event event)]
     (condp key-pressed? event
       :c (universe/change-colors updated-state)
@@ -103,10 +104,17 @@
       :else
       state)))
 
+;; This is hackey, but ClojureScript cannot resolve functions stored in a map as a symbol or string. Clojure can.
+;; See https://stackoverflow.com/questions/12020576/resolve-function-throws-an-error-in-clojurescript-but-not-clojure
+(def universe-draw-functions {:boss universe/draw-boss
+                              :game-world universe/draw-game-world
+                              :player universe/draw-player
+                              :puck universe/draw-puck})
+
 (defn draw-functions
   "Returns of vector of the functions to draw everything, in the right order to draw them."
   [state]
-  (flatten [(universe/order-of-draw-functions state)
+  (flatten [(map universe-draw-functions (universe/order-of-draw-functions state))
             score/draw
             messages/draw
             hud/draw]))
