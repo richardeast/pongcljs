@@ -49,5 +49,6 @@
       (assoc-in [:style] (styles/random-style))
       (boss/change-colors)
       (player/change-colors)
+      (puck/change-colors)
       (game-world/change-colors)
       (state/save)))

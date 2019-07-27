@@ -52,6 +52,12 @@
   (* 15
      (/ y (q/height))))
 
+(defn change-colors
+  [state]
+  (let [[col1 col2] (map #(styles/n->color state %) [1 4])]
+    (-> state
+        (assoc-in [:universe :puck :colors :fill-color] col1)
+        (assoc-in [:universe :puck :colors :stroke-color] col2))))
 
 (defn change-camera-angle
   "Change the current camera. f will be inc or dec"

@@ -40,3 +40,8 @@
    (style->color :bright-bokeh first) ;; gets first color for that style"
   [k f]
   (f (k color-palettes)))
+
+(defn n->color
+  "return hex color based on position in the style"
+  [state n]
+  (style->color (:style state) #(nth % n)))

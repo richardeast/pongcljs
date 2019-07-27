@@ -8,11 +8,10 @@
 ;;TODO This is a bit too like boss/change-colors. Refactor
 (defn change-colors
   [state]
-  (-> state
-      (assoc-in [:universe :player :colors :fill-color]
-                (styles/style->color
-                 (:style state)
-                 first))))
+  (let [color (styles/n->color state 0)]
+    (-> state
+        (assoc-in [:universe :player :colors :fill-color] color)
+        (assoc-in [:universe :player :colors :stroke-color] color))))
 
 (defn mouse-x-pos []
   (let [m (q/mouse-x)
@@ -72,7 +71,7 @@
   "The player is a pong bat, but could be a character like Mario or Space Harrier"
   [state]
   (let [player (get-in state [:universe :player])
-        {:keys [fill-color fill-transparency]} (:colors player)
+        {:keys [fill-color fill-transparency stroke-color]} (:colors player)
         {:keys [x y]} (:pos player)
         {w :width h :height} (:paddle state)
         x2 (- x (/ w 2)) ;; this adds an offset,
@@ -80,4 +79,5 @@
         y2 (- y (/ h 2)) ;; as above
         ]
     (hex/fill fill-color fill-transparency)
+    (hex/stroke stroke-color fill-transparency)
     (q/rect x2 y2 w h)))

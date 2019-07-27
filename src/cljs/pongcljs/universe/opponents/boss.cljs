@@ -13,11 +13,10 @@
 ;;TODO This is a bit too like player/change-colors. Refactor
 (defn change-colors
   [state]
-  (-> state
-      (assoc-in [:universe :boss :colors :fill-color]
-                (styles/style->color
-                 (:style state)
-                 second))))
+  (let [color (styles/n->color state 1)]
+    (-> state
+        (assoc-in [:universe :boss :colors :fill-color] color)
+        (assoc-in [:universe :boss :colors :stroke-color] color))))
 
 (defn hit-puck?
   "They hit the puck if the bottom of the puck touches the player's paddle"
@@ -84,8 +83,9 @@
   [state]
   ;;TODO this is too much like player/draw refactor
   (let [boss (get-in state [:universe :boss])
-        {:keys [fill-color fill-transparency]} (:colors boss)
+        {:keys [fill-color fill-transparency stroke-color]} (:colors boss)
         {:keys [x y]} (:pos boss)
         {w :width h :height} (:paddle state)]
     (hex/fill fill-color fill-transparency)
+    (hex/stroke stroke-color fill-transparency)
     (q/rect x y w h)))
