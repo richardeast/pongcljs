@@ -9,6 +9,9 @@
 
 ;; TODO Make Clojure/ClojureScript neutral
 
+;; TODO local storage may be better than cookies: 4096 Bytes size limit for cookies vs 5Mb default for LocalStorage.
+;; TODO Look into DataScript (github.com/tonsky/datascript), could be a better tool for storing game state.
+
 (def cookie-name "state")
 (def empty? cookies/empty?)
 

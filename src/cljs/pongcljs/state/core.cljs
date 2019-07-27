@@ -23,6 +23,7 @@
   (log/info "get starting state")
   (cond
     ;; TODO remove not when state saving has been fixed.
+    (store/empty?) (reset)
     (not (store/empty?)) (reset)
     :else
     (let [state (store/get)]

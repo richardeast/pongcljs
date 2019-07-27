@@ -21,6 +21,7 @@
   :dependencies [[org.clojure/clojure "1.10.0"]
                  [org.clojure/clojurescript "1.10.439"]
                  [quil "2.8.0"]
+                 [cljs-bach "0.3.0"] ; for sound
                  [reagent-utils "0.3.3"]] ; for saving cookies
 
   :plugins [[lein-cljsbuild "1.1.7"]

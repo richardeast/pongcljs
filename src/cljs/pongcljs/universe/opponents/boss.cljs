@@ -2,8 +2,9 @@
   (:refer-clojure :exclude [update])
   (:require [quil.core :as q :include-macros true]
             [pongcljs.hex-rgb :as hex]
-            [pongcljs.universe.puck :as puck]
-            [pongcljs.styles :as styles]))
+            [pongcljs.sound :as sound]
+            [pongcljs.styles :as styles]
+            [pongcljs.universe.puck :as puck]))
 
 ;; Some Universal values
 (def degrees-in-circle 360)

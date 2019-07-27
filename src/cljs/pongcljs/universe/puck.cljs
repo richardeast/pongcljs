@@ -2,6 +2,7 @@
   (:refer-clojure :exclude [update])
   (:require [quil.core :as q :include-macros true]
             [quil.middleware :as m]
+            [pongcljs.logging :as log]
             [pongcljs.universe.game-world :as game-world]
             [pongcljs.hex-rgb :as hex]
             [pongcljs.styles :as styles]))
@@ -32,6 +33,7 @@
   [state]
   ;;TODO need to add some friction to slow speedy pucks down over time,
   ;; but never to zero. It still needs some base speed otherwise game would be dull
+;;  (log/info (get-in state [:universe :puck :functions ])  )
   (let [d (get-in state [:universe :puck :functions :direction])
         speed (get-in state [:universe :puck :speed])
         f (d directions)]

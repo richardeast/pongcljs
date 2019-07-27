@@ -2,8 +2,9 @@
   (:refer-clojure :exclude [update])
   (:require [quil.core :as q :include-macros true]
             [pongcljs.hex-rgb :as hex]
-            [pongcljs.universe.puck :as puck]
-            [pongcljs.styles :as styles]))
+            [pongcljs.sound :as sound]
+            [pongcljs.styles :as styles]
+            [pongcljs.universe.puck :as puck]))
 
 ;;TODO This is a bit too like boss/change-colors. Refactor
 (defn change-colors
@@ -58,14 +59,13 @@
 ;; TODO if moving faster than the puck need to pass this speed to the puck and push it to the new end position
 (defn update
   [state]
-  (if (hit-puck? state)
-    (->
-     (puck/repulse-puck state)
-     (assoc-in [:universe :player :pos] {:x (mouse-x-pos)
-                                         :y (mouse-y-pos state)}))
-    ;;else
-    (assoc-in state [:universe :player :pos] {:x (mouse-x-pos)
-                                              :y (mouse-y-pos state)})))
+  (let [hit (hit-puck? state)
+        new-state (-> state
+                      (assoc-in [:universe :player :pos] {:x (mouse-x-pos)
+                                                          :y (mouse-y-pos state)})
+                      (assoc-in [:universe :player :collision] hit))] ; to be used with sound
+    (cond hit (puck/repulse-puck new-state)
+          :else new-state)))
 
 (defn draw
   "The player is a pong bat, but could be a character like Mario or Space Harrier"

@@ -64,6 +64,7 @@
                                 :stroke-weight 3
                                 :fill-color nil
                                 :fill-transparency 200}
+                       :collision false
                        :functions {:draw :player} ; TODO - Don't need in the long run
                        :pos {:x 0
                              :y 0}}
