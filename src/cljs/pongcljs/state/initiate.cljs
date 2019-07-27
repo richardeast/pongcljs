@@ -18,6 +18,8 @@
         halfway-across (/ screen-width 2)]
     (->
      state
+     (assoc-in [:score :colors :fill-color] (styles/style->color default-style #(nth % 2)))
+     (assoc-in [:score :colors :stroke-color] (styles/style->color default-style #(nth % 4)))
      (assoc-in [:universe :boss :colors :fill-color] (styles/style->color default-style second))
      (assoc-in [:universe :boss :pos] (let [h (/ screen-height 5.5)
                                             w (- halfway-across
@@ -28,18 +30,16 @@
      (assoc-in [:universe :game-world :items :ground :colors :fill-color] (styles/style->color default-style #(nth % 2)))
      (assoc-in [:universe :game-world :items :sky :colors :fill-color] (styles/style->color default-style #(nth % 3)))
      (assoc-in [:universe :game-world :items :tennis-court :colors :fill-color] (styles/style->color default-style #(nth % 4)))
-     (assoc-in [:universe :game-world :items :tennis-court :colors :stroke-color] (styles/style->color default-style first))
+     (assoc-in [:universe :game-world :items :tennis-court :colors :stroke-color] (styles/style->color default-style #(nth % 0)))
      (assoc-in [:universe :game-world :horizon] (/ screen-height 6))
-     (assoc-in [:universe :boss :functions :draw] :boss)
-     (assoc-in [:universe :game-world :functions :draw] :game-world)
-     (assoc-in [:universe :player :functions :draw] :player)
-     (assoc-in [:universe :puck :functions :draw] :puck)
 
-     (assoc-in [:universe :player :colors :fill-color] (styles/style->color default-style first))
+     (assoc-in [:universe :player :colors :fill-color] (styles/style->color default-style #(nth % 0)))
      (assoc-in [:universe :player :pos] {:x halfway-across
                                          :y (- screen-height 100)})
 
      (assoc-in [:universe :puck :pos] (game-world/centre state))
+     (assoc-in [:universe :puck :colors :fill-color] (styles/style->color default-style #(nth % 1)))
+     (assoc-in [:universe :puck :colors :stroke-color] (styles/style->color default-style #(nth % 4)))
      (assoc-in [:messages :languages] messages/text)
      ;; (save)
      )))

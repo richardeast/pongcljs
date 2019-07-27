@@ -34,11 +34,6 @@
 (defn pick-color [f state]
   (f (get-current-palette state)))
 
-(def color-a (fn [state] (pick-color first state)))
-(def color-b (fn [state] (pick-color second state)))
-(def color-c (fn [state] (pick-color #(nth % 2) state)))
-(def color-d (fn [state] (pick-color last state)))
-
 ;; Functions for getting a color when style passed in
 (defn style->color
   "Pick a color from a style -

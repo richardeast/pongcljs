@@ -31,22 +31,29 @@
               :text-size 20}
    :paddle {:width 100 :height 30} ; TODO might be nice for these to be relative to the screen size
    :paused true
-   :score {:color nil
+   :score {:colors {:stroke-color nil
+                    :stroke-weight 3
+                    :fill-color nil
+                    :fill-transparency 255
+                    :text-size 40}
            :functions {:draw nil}
+           :separator " : "
+           :pos {:x 680 :y 60}
            :values [0 0]}
    :screen {:size [850 600]} ; TODO might be nice for this to be dynamically adjusted, based on the browser window
+   :sound {:on true}
    :style :algave-glitch
    :universe {:boss {:colors {:stroke-color nil
                               :stroke-weight 3
                               :fill-color nil
                               :fill-transparency 200}
-                     :functions {:draw nil}
+                     :functions {:draw :boss} ; TODO - Don't need in the long run
                      :pos {:x 0
                            :y 0}
                      :angle 0.0}
               :game-world {:pos {:x 0 :y 0}
                            :color nil
-                           :functions {:draw nil}
+                           :functions {:draw :game-world} ; TODO - Don't need in the long run
                            :horizon nil
                            :items {:sky {:colors {:fill-color nil}}
                                    :ground {:colors {:fill-color nil}}
@@ -57,15 +64,19 @@
                                 :stroke-weight 3
                                 :fill-color nil
                                 :fill-transparency 200}
-                       :functions {:draw nil}
+                       :functions {:draw :player} ; TODO - Don't need in the long run
                        :pos {:x 0
                              :y 0}}
-              :puck {:color nil
-                     :functions {:draw nil
+              :puck {:colors {:stroke-color nil
+                             :stroke-weight 1
+                             :fill-color nil
+                             :fill-transparency 255}
+                     :functions {:draw :puck ; TODO - Don't need in the long run
                                  :direction :away}
                      :pos {:x 0
                            :y 0}
                      :height 25  ; TODO might be nice for these to be relative to the screen size
+                     :speed 6
                      :width 50
                      :depth 5}}})
 ;; That'll do pig, that'll do

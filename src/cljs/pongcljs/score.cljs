@@ -34,12 +34,20 @@
       :else
        state)))
 
-;;TODO make the score for each side, the same colour as the player's bat/paddle
 (defn draw
   "Show the score"
   [state]
-  (let [[a b] (get-in state [:score :values])]
-    (hex/fill (styles/color-b state))
+  (let [boss-color (get-in state [:universe :boss :colors :fill-color])
+        player-color (get-in state [:universe :player :colors :fill-color])
+        {:keys [values colors pos separator]} (get-in state [:score])
+        {:keys [stroke-color stroke-weight fill-color fill-transparency text-size]} colors
+        {:keys [x y]} pos
+        [a b] values]
     (q/text-size 40)
-    ;; TODO Use the colors set in Boss and Player namespace
-    (q/text (str a  " : " b) 680 60)))
+    ;; Using the Boss and Player colors in the score to aid the player to know the results.
+    (hex/fill boss-color fill-transparency)
+    (q/text a x y)
+    (hex/fill fill-color fill-transparency)
+    (q/text separator (+ x 20) y)
+    (hex/fill player-color fill-transparency)
+    (q/text b (+ x 60) y)))

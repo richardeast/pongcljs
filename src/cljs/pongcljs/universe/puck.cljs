@@ -33,12 +33,12 @@
   ;;TODO need to add some friction to slow speedy pucks down over time,
   ;; but never to zero. It still needs some base speed otherwise game would be dull
   (let [d (get-in state [:universe :puck :functions :direction])
+        speed (get-in state [:universe :puck :speed])
         f (d directions)]
-    (f 1)))
+    (f speed)))
 
 (defn update-y [state]
   (let [y (get-in state [:universe :puck :pos :y])]
-    (+ y -0.07)
     (+ y (speed state))))
 
 (defn update-x [state]
@@ -86,10 +86,13 @@
 
 ;;TODO remove perspective-multiplier when it's used in update-puck
 (defn draw [state]
-  (let [puck (get-in state [:universe :puck]) 
+  (let [puck (get-in state [:universe :puck])
+        {:keys [fill-color fill-transparency stroke-color stroke-weight]} (:colors puck)
         {{:keys [x y]} :pos} puck
          {h :height w :width d :depth} puck]
-    (hex/fill (styles/color-b state))
+    (hex/fill fill-color fill-transparency)
+    (hex/stroke stroke-color)
+    (q/stroke-weight stroke-weight)
     (q/ellipse x
                y
                (+ w (perspective-multiplier y))
