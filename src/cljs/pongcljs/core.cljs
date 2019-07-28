@@ -47,8 +47,7 @@
     (-> inc-camera-state
         ;; TODO constrain the movement of the horizon based on min/max camera angle
         (assoc-in [:universe :game-world :horizon]
-                  (f current-horrizon))
-        (puck/change-camera-angle f))))
+                  (f current-horrizon)))))
 
 (defn update-game [state]
   ;; this maybe better expressed with (When (not (:paused)))

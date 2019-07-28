@@ -61,24 +61,6 @@
         (assoc-in [:universe :puck :colors :fill-color] col1)
         (assoc-in [:universe :puck :colors :stroke-color] col2))))
 
-(defn change-camera-angle
-  "Change the current camera. f will be inc or dec"
-  [state f]
-  (let [current-angle (get-in state [:camera :angle])
-        max-angle (get-in state [:camera :max-angle])
-        min-angle (get-in state [:camera :min-angle])
-        ]
-    (if (< min-angle current-angle max-angle)
-      (-> state
-          (assoc-in [:universe :puck :depth]
-                    (* 5 (/ (+ 100 current-angle)
-                            100)))
-          (assoc-in [:universe :puck :height]
-                    (* 25 (/ (- 100 current-angle)
-                             100))))
-      ;else
-      state)))
-
 ;;TODO update the width height here.
 ;; so it's easier to monitor.
 (defn update [state]
@@ -97,14 +79,30 @@
   (let [puck (get-in state [:universe :puck])
         {:keys [fill-color fill-transparency stroke-color stroke-weight]} (:colors puck)
         {{:keys [x y]} :pos} puck
-         {h :height w :width d :depth} puck]
+        {diameter :diameter depth :depth} puck
+        ;; Camera angles
+        {{:keys [angle max-angle min-angle]} :camera} state
+        h (if (< min-angle angle max-angle)
+            (* diameter
+               (/ (- 100 angle)
+                  100))
+            ;else
+            diameter)
+        d (if (< min-angle angle max-angle)
+            (* depth
+               (/ (- 100 angle)
+                  100))
+            ;else
+            depth)]
     (hex/fill fill-color fill-transparency)
     (hex/stroke stroke-color)
     (q/stroke-weight stroke-weight)
     (q/ellipse x
                y
-               (+ w (perspective-multiplier y))
+               (+ diameter (perspective-multiplier y))
                (+ h (perspective-multiplier y)))
-    (q/ellipse x (- y d)
-               (+ w (perspective-multiplier y))
+    (q/ellipse x
+               (- y d)
+               (+ diameter (perspective-multiplier y))
                (+ h (perspective-multiplier y)))))
+

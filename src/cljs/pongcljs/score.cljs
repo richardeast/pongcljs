@@ -20,8 +20,7 @@
    [state score]
    (-> (assoc-in state [:score :values] score)
        (puck/reset-in-centre)
-       (puck/toggle-direction)
-       ))
+       (puck/toggle-direction)))
 
 (defn update
   "Update the score"
@@ -43,8 +42,9 @@
         {:keys [stroke-color stroke-weight fill-color fill-transparency text-size]} colors
         {:keys [x y]} pos
         [a b] values]
-    (q/text-size 40)
+    (q/text-size text-size)
     ;; Using the Boss and Player colors in the score to aid the player to know the results.
+    ;; TODO If boss's score is too big, it merges into the text separator
     (hex/fill boss-color fill-transparency)
     (q/text a x y)
     (hex/fill fill-color fill-transparency)

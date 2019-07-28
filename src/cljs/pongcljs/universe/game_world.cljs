@@ -49,7 +49,8 @@
             screen-width
             screen-height)))
 
-;; TODO Magic Number here. Move to the game-world state.
+;; TODO Magic Numbers here.
+;; This needs to be based off the size of the screen and the camera angle.
 (defn draw-court-quadrant [state]
   (let [[w h] (get-in state [:screen :size])
         court-top (horizon-height state)

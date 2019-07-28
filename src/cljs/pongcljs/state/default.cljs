@@ -68,7 +68,10 @@
                        :functions {:draw :player} ; TODO - Don't need in the long run
                        :pos {:x 0
                              :y 0}}
-              :puck {:colors {:stroke-color nil
+              :puck {
+                     :acceleration {:x nil ; Change in velocity over time
+                                    :y nil}
+                     :colors {:stroke-color nil
                              :stroke-weight 1
                              :fill-color nil
                              :fill-transparency 255}
@@ -76,8 +79,7 @@
                                  :direction :away}
                      :pos {:x 0
                            :y 0}
-                     :height 25  ; TODO might be nice for these to be relative to the screen size
                      :speed 6
-                     :width 50
+                     :diameter 30 ; TODO might be nice for these to be relative to the screen size
                      :depth 5}}})
 ;; That'll do pig, that'll do
