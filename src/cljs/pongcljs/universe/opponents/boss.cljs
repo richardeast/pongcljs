@@ -23,9 +23,9 @@
   [state]
   (let [{paddle :paddle} state
         {:keys [boss puck]} (get-in state [:universe])
-        {:keys [pos height width depth]} puck
+        {:keys [pos diameter depth]} puck
         {x :x y :y} pos
-        puck-bottom (+ y (/ height 2) depth)
+        puck-bottom (+ y (/ diameter 2) depth)
         {boss-x :x boss-y :y} (:pos boss)
          paddle-height (:height paddle)]
     (cond

@@ -5,8 +5,6 @@
             [cljs.pprint :as pprint]))
 
 ;; Bret Victor - Inventing on Principle https://www.youtube.com/watch?v=PUv66718DII
-;; TODO Draw the path the puck is going
-;; TODO Draw the path the puck has been
 ;; TODO Draw the opponents path
 ;; TODO Draw the player's past
 
@@ -14,6 +12,20 @@
   [state]
    (assoc-in state [:hud :show]
              (not (get-in state [:hud :show]))))
+
+(defn lineAngle
+  "Draw line from one point of a fixed length by an angle"
+  ;; TODO Draw the path the puck is going
+  ;; TODO Draw the path the puck has been
+  [x y length angle]
+  (q/stroke 235 135 0)
+  (q/line x y
+          (* length
+             (+ x
+                (Math/sin angle)))
+          (* length
+             (+ y
+                (Math/cos angle)))))
 
 (defn pprint-2dp
   "Print to two decimal places."
@@ -27,10 +39,16 @@
                " y:" (pprint-2dp y1)) x2 y2))
 
 (defn draw-puck-position
-  [puck]
-  (let [{x :x y :y} (:pos puck)]
+  [state]
+  (let [{:keys [angle speed pos]} (get-in state [:universe :puck])
+        line-length (first (get-in state [:screen :size]))
+        {x :x y :y} pos
+        {xspeed :x yspeed :y} speed]
     (q/text-size 15)
-    (pprint-xy x y (+ 25 x) y)))
+    (pprint-xy x y (+ 25 x) y)
+    (q/text (str "\n\n angle: " (pprint-2dp angle)) (+ 25 x) y)
+    (q/text (str "\n\n\n speed - x:" (pprint-2dp xspeed) " y:" (pprint-2dp yspeed)) (+ 25 x) y)
+    (lineAngle x y line-length angle)))
 
 (defn draw-player-position
   [player paddle]
@@ -76,22 +94,23 @@
       ;; TODO comp pprint with-out-str q/text and make cljs.pprint work with java
       (q/text-size 20)
       ;; (q/text (with-out-str (pprint/pprint state)) 30 30)
-      (q/text (str  ":event " event ",\n"
+      (q/text (str ;; ":event " event ",\n"
                    ;; ":camera" camera ",\n"
                    ;;  ":mouse-wheel" mouse-wheel ",\n"
                    ;; ":messages " messages ",\n"
                    ;; ":boss " boss ",\n"
-                    ":tennis " tennis-court ",\n"
+                   ;; ":tennis " tennis-court ",\n"
                   ;; ":paddle " paddle ",\n"
-                   ;; ":player " player ",\n"
-                    ":puck-depth " (get-in puck [:depth]) ",\n"
+               ;; ":player " player ",\n"
+                  ":puck"
+                  ;;  ":puck-depth " (get-in puck [:depth]) ",\n"
                   ;; ":paddle " paddle ",\n"
                   ;; ":score " score ",\n"
                    ;; ":style " style
                    )
               30 30)
       (draw-player-position player paddle)
-      (draw-puck-position puck)
+      (draw-puck-position state)
       (draw-boss-position boss paddle)
       (draw-mouse-pointer-position)
       (draw-corners-of-screen)

@@ -14,21 +14,39 @@
 
 (defn repulse-puck
   "send puck away from the player's side of the board"
-  [state] (change-direction state :away))
+  [state]
+  (let [yspeed (get-in state [:universe :puck :speed :y])
+        new-direction (cond
+                        (neg? yspeed) yspeed
+                        :else (* -1 yspeed))]
+    (-> state
+        (change-direction :away) ; TODO delete
+        (assoc-in [:universe :puck :speed :y] new-direction))))
 
 (defn attract-puck
   "send puck towards the player's side of the board"
-  [state] (change-direction state :towards))
+  [state]
+  (let [yspeed (get-in state [:universe :puck :speed :y])
+        new-direction (cond
+                        (neg? yspeed) (* -1 yspeed)
+                        :else yspeed)]
+    (-> state
+        (change-direction :towwards) ; TODO delete
+        (assoc-in [:universe :puck :speed :y] new-direction))))
 
 (defn toggle-direction
   "Update the direction of the puck. If it's going away, flip towards and visa-versa"
   [state]
   (let [direction (get-in state [:universe :puck :functions :direction])
+        yspeed (get-in state [:universe :puck :speed :y])
         toggle (if (= direction :away) :towards
-                                       :away)]
-    (change-direction state toggle)))
+                   :away)
+        new-direction (* -1 yspeed)]
+    (-> state
+        (change-direction toggle)
+        (assoc-in [:universe :puck :speed :y] new-direction))))
 
-(defn yspeed
+(defn yspeedx
   ""
   [state]
   ;;TODO need to add some friction to slow speedy pucks down over time,
@@ -37,26 +55,21 @@
   (let [d (get-in state [:universe :puck :functions :direction])
         yspeed (get-in state [:universe :puck :speed :y])
         f (d directions)]
-    (f yspeed)))
+     ;;(f yspeed)
+    yspeed))
 
-(defn xspeed
-  ""
-  [state]
-  ;;TODO need to add some friction to slow speedy pucks down over time,
-  ;; but never to zero. It still needs some base speed otherwise game would be dull
-  ;;  (log/info (get-in state [:universe :puck :functions ])  )
-  (let [d (get-in state [:universe :puck :functions :direction])
-        xspeed (get-in state [:universe :puck :speed :x])
-        f (d directions)]
-    (f xspeed)))
+;; but never to zero. It still needs some base speed otherwise game would be dull
+;;  (log/info (get-in state [:universe :puck :functions ])  )
 
 (defn update-y [state]
-  (let [y (get-in state [:universe :puck :pos :y])]
-    (+ y (yspeed state))))
+  (let [y (get-in state [:universe :puck :pos :y])
+        yspeed (get-in state [:universe :puck :speed :y])]
+    (+ y yspeed)))
 
 (defn update-x [state]
-  (let [x (get-in state [:universe :puck :pos :x])]
-    (+ x (xspeed state))))
+  (let [x (get-in state [:universe :puck :pos :x])
+        xspeed (get-in state [:universe :puck :speed :x])]
+    (+ x xspeed)))
 
 ;;TODO this is too subtle
 (defn perspective-multiplier
@@ -83,7 +96,15 @@
 (defn reset-in-centre
   "Puts the puck state in the centre of the board. This function is called outside of this namespace, such as when a player scores."
   [state]
-  (assoc-in state [:universe :puck :pos] (game-world/centre)))
+  (let [angle (if (zero? (rand-int 1))  ;; A little bit magic numbers. Re-work
+                (rand (/ Math/PI 2))
+                (- 0 (rand (/ Math/PI 2))))
+        {xspeed :x yspeed :y} (get-in state [:universe :puck :speed])]
+    (-> state
+        (assoc-in [:universe :puck :pos] (game-world/centre state))
+        (assoc-in [:universe :puck :angle] angle)
+        (assoc-in [:universe :puck :speed] {:x (* xspeed (Math/cos angle))
+                                            :y (* yspeed (Math/sin angle))}))))
 
 ;;TODO remove perspective-multiplier when it's used in update-puck
 (defn draw [state]

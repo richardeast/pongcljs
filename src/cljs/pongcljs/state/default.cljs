@@ -51,7 +51,7 @@
                      :functions {:draw :boss} ; TODO - Don't need in the long run
                      :pos {:x 0
                            :y 0}
-                     :speed 10}
+                     :speed 50}
               :game-world {:pos {:x 0 :y 0}
                            :color nil
                            :functions {:draw :game-world} ; TODO - Don't need in the long run
@@ -82,7 +82,7 @@
                                  }
                      :pos {:x 0
                            :y 0}
-                     :speed {:x 1000 :y 1000}
+                     :speed {:x 5 :y 5}
                      :diameter 30 ; TODO might be nice for these to be relative to the screen size
                      :depth 5}}})
 ;; That'll do pig, that'll do
