@@ -9,7 +9,6 @@
 ;; Some Universal values
 (def degrees-in-circle 360)
 (def oscillations 10)
-(def speed 10)
 
 ;;TODO This is a bit too like player/change-colors. Refactor
 (defn change-colors
@@ -37,20 +36,21 @@
       :else false)))
 
 (defn update-boss-state
-  ""
-  [state x y boss-angle speed]
-  (-> state
-      (assoc-in [:universe :boss :pos] {:x x :y y})
-      (assoc-in [:universe :boss :angle]
-                (mod (+ boss-angle speed)
-                     (* degrees-in-circle oscillations) ; this mod stops the angle getting too large
-                     ))))
+  [state x y boss-angle]
+  (let [speed (get-in state [:universe :boss :speed])]
+    (-> state
+        (assoc-in [:universe :boss :pos] {:x x :y y})
+        (assoc-in [:universe :boss :angle]
+                  (mod (+ boss-angle speed)
+                       (* degrees-in-circle oscillations) ; this mod stops the angle getting too large
+                       )))))
 
 ;; TODO revisit this and consider a Lissajous curve as shown here:
 ;; http://quil.info/sketches/show/example_lissajous-table
 ;; https://en.wikipedia.org/wiki/Lissajous_curve
 (defn update [state]
-  (let [w (q/width)
+  ;; TODO remove q
+  (let [[w _] (get-in state [:screen :size])
         boss-angle (get-in state [:universe :boss :angle])
         paddle-width (get-in state [:paddle :width])
         scalar (* w 0.2) ; size up the paddle so it can run across the board
@@ -58,7 +58,7 @@
         x (-> boss-angle
               q/radians
               (/ oscillations)                 ; this affects the number of oscillations it makes
-              q/sin
+              Math/sin
               (* scalar)             ; size up the paddle so it can run across the board
               (+ (/ w 2))            ; moves it across so it can play in the centre of the board
               (- (/ paddle-width 2)) ; a slight offset to centre the paddle
@@ -67,13 +67,12 @@
         y (-> boss-angle
               q/radians
               (/ 2)      ; this affects the number of oscillations it makes
-              q/sin
+              Math/sin
               (/ 5.5)    ; the smaller the number the bigger the up and down movement
               (* scalar) ; size up the paddle so it can run across the board
               (+ 110)    ; move it down
               )
-        updated-state (update-boss-state state x y boss-angle speed)
-        ]
+        updated-state (update-boss-state state x y boss-angle)]
     (cond (hit-puck? updated-state)
           (puck/attract-puck updated-state)
       :else

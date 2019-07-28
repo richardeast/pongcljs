@@ -28,24 +28,35 @@
                                        :away)]
     (change-direction state toggle)))
 
-(defn speed
+(defn yspeed
   ""
   [state]
   ;;TODO need to add some friction to slow speedy pucks down over time,
   ;; but never to zero. It still needs some base speed otherwise game would be dull
 ;;  (log/info (get-in state [:universe :puck :functions ])  )
   (let [d (get-in state [:universe :puck :functions :direction])
-        speed (get-in state [:universe :puck :speed])
+        yspeed (get-in state [:universe :puck :speed :y])
         f (d directions)]
-    (f speed)))
+    (f yspeed)))
+
+(defn xspeed
+  ""
+  [state]
+  ;;TODO need to add some friction to slow speedy pucks down over time,
+  ;; but never to zero. It still needs some base speed otherwise game would be dull
+  ;;  (log/info (get-in state [:universe :puck :functions ])  )
+  (let [d (get-in state [:universe :puck :functions :direction])
+        xspeed (get-in state [:universe :puck :speed :x])
+        f (d directions)]
+    (f xspeed)))
 
 (defn update-y [state]
   (let [y (get-in state [:universe :puck :pos :y])]
-    (+ y (speed state))))
+    (+ y (yspeed state))))
 
 (defn update-x [state]
   (let [x (get-in state [:universe :puck :pos :x])]
-    (+ x -0.07)))
+    (+ x (xspeed state))))
 
 ;;TODO this is too subtle
 (defn perspective-multiplier

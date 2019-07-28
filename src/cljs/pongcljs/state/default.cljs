@@ -43,14 +43,15 @@
    :screen {:size [850 600]} ; TODO might be nice for this to be dynamically adjusted, based on the browser window
    :sound {:on true}
    :style :algave-glitch
-   :universe {:boss {:colors {:stroke-color nil
+   :universe {:boss {:angle 0.0
+                     :colors {:stroke-color nil
                               :stroke-weight 3
                               :fill-color nil
                               :fill-transparency 200}
                      :functions {:draw :boss} ; TODO - Don't need in the long run
                      :pos {:x 0
                            :y 0}
-                     :angle 0.0}
+                     :speed 10}
               :game-world {:pos {:x 0 :y 0}
                            :color nil
                            :functions {:draw :game-world} ; TODO - Don't need in the long run
@@ -68,18 +69,20 @@
                        :functions {:draw :player} ; TODO - Don't need in the long run
                        :pos {:x 0
                              :y 0}}
-              :puck {
-                     :acceleration {:x nil ; Change in velocity over time
-                                    :y nil}
+              :puck {:acceleration {:x nil ; Change in velocity over time
+                                    :y nil} ; TODO Not used yet
+                     :angle nil
                      :colors {:stroke-color nil
                              :stroke-weight 1
                              :fill-color nil
                              :fill-transparency 255}
                      :functions {:draw :puck ; TODO - Don't need in the long run
-                                 :direction :away}
+                                 :direction :away
+                                 ;; TODO :direction {:x :away :y :away}
+                                 }
                      :pos {:x 0
                            :y 0}
-                     :speed 6
+                     :speed {:x 1000 :y 1000}
                      :diameter 30 ; TODO might be nice for these to be relative to the screen size
                      :depth 5}}})
 ;; That'll do pig, that'll do

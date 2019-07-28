@@ -16,7 +16,8 @@
   (let [[screen-width screen-height] (get-in state [:screen :size])
         halfway-across (/ screen-width 2)
         n->color #(styles/n->color state %)
-        [col0 col1 col2 col3 col4] (map n->color [0 1 2 3 4])]
+        [col0 col1 col2 col3 col4] (map n->color [0 1 2 3 4])
+        {xspeed :x yspeed :y} (get-in state [:universe :puck :speed])]
     (->
      state
      (assoc-in [:score :colors :fill-color] col2)
@@ -43,6 +44,11 @@
      (assoc-in [:universe :puck :pos] (game-world/centre state))
      (assoc-in [:universe :puck :colors :fill-color] col1)
      (assoc-in [:universe :puck :colors :stroke-color] col4)
+     (assoc-in [:universe :puck :angle] (if (zero? (rand-int 1))
+                                          (rand (/ Math/PI 4))
+                                          (- 0 (rand (/ Math/PI 4)))))
+     (assoc-in [:universe :puck :speed] {:x (Math/cos xspeed)
+                                         :y (Math/sin yspeed)})
      (assoc-in [:messages :languages] messages/text)
      ;; (save)
      )))
