@@ -7,6 +7,11 @@
             [pongcljs.hex-rgb :as hex]
             [pongcljs.styles :as styles]))
 
+;; TODO - nice effects - https://p5js.org/examples/motion-non-orthogonal-reflection.html
+;; Non-orthogonal Reflection by Ira Greenberg. https://processing.org/examples/reflection1.html
+;; (R = 2N(N*L)-L)
+;; reflection vector, N is the normal, and L is the incident vector.
+
 (def directions {:away -      ; away from the player
                  :towards +}) ; towards the player
 
@@ -137,4 +142,3 @@
                (- y d)
                (+ diameter (perspective-multiplier y))
                (+ h (perspective-multiplier y)))))
-

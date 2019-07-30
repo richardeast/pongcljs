@@ -19,7 +19,10 @@
             :min-angle -100} ;; TODO these min/max angles are a smell. Ought to make it a real angle, like 90 degrees.
    :event nil
    :frame-rate 25
-   :hud {:show true}
+   :hud {:show true
+         :colors {:text-color "#00ff00"
+                  :text-size-data 20
+                  :text-size-position 12}}
    :mouse-wheel nil
    :messages {:active-state :welcome
               :background-transparency 100 ; TODO move to the colors

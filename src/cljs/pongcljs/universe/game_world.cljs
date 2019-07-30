@@ -17,6 +17,8 @@
       (set-color [:tennis-court :colors :stroke-color] 0)
       (set-color [:sky :colors :fill-color] 3)))
 
+;; TODO Magic Numbers here.
+;; This needs to be based off the size of the screen and the camera angle.
 (defn horizon-height [state]
   (get-in state [:universe :game-world :horizon]))
 
