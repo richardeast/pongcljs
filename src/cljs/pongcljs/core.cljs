@@ -2,15 +2,13 @@
   "This is the heart of the game. Everything is called from here."
   (:require [quil.core :as q :include-macros true]
             [quil.middleware :as m]
+            [pongcljs.camera :as camera]
             [pongcljs.hud :as hud]
             [pongcljs.logging :as log]
             [pongcljs.messages :as messages]
             [pongcljs.state.core :as state]
             [pongcljs.score :as score]
-            ;;TODO We should only require here universe
-            [pongcljs.universe.core :as universe]
-            [pongcljs.universe.game-world :as game-world]
-            [pongcljs.universe.puck :as puck]))
+            [pongcljs.universe.core :as universe]))
 
 ;;; ToDos
 ;; TODO - https://js.org/ - host the running project
@@ -20,37 +18,8 @@
 
 ;; TODO - 5.17: Introduction to Matter.js - The Nature of Code https://www.youtube.com/watch?v=urR596FsU68
 
-(defn update-camera
-  ""
-  [state f]
-  (let [current-angle (get-in state [:camera :angle])]
-    (assoc-in state [:camera :angle]
-              (f current-angle))))
-
-(defn change-camera-angle
-  "Change the current camera angle. f will be inc or dec"
-  [state f]
-  (let [current-angle (get-in state [:camera :angle])
-        max-angle (get-in state [:camera :max-angle])
-        min-angle (get-in state [:camera :min-angle])
-        current-horrizon (get-in state [:universe :game-world :horizon])
-        dec-camera-state (if (and (= f dec)
-                                  (> current-angle min-angle))
-                           (update-camera state dec)
-                           ;else
-                           state)
-        inc-camera-state (if (and (= f inc)
-                                  (< current-angle max-angle))
-                           (update-camera dec-camera-state inc)
-                           ;else
-                           dec-camera-state)]
-    (-> inc-camera-state
-        ;; TODO constrain the movement of the horizon based on min/max camera angle
-        (assoc-in [:universe :game-world :horizon]
-                  (f current-horrizon)))))
-
 (defn update-game [state]
-  ;; this maybe better expressed with (When (not (:paused)))
+  ;; TODO this maybe better expressed with (When (not (:paused)))
   (cond
     (:paused state) state
     :else (universe/update state)))
@@ -69,8 +38,8 @@
       :c (universe/change-colors updated-state)
       :H (hud/toggle-hud updated-state) ; toggle hud if H key pressed
       :h (messages/toggle-help updated-state) ; toggle help if h key pressed
-      :down (change-camera-angle updated-state inc)
-      :up (change-camera-angle updated-state dec)
+      :down (camera/change-angle updated-state inc)
+      :up (camera/change-angle updated-state dec)
       :r (state/reset) ; Reset the game / new game
       ;; TODO add more keys. Such as:
       ;; cheat/god mode
@@ -83,8 +52,8 @@
 (defn mouse-wheel-rotate
   [state m]
   (assoc state :mouse-wheel m)
-  (cond (= 1 m) (change-camera-angle state inc)
-        :else (change-camera-angle state dec)))
+  (cond (= 1 m) (camera/change-angle state inc)
+        :else (camera/change-angle state dec)))
 
 (defn mouse-clicked
   "-> new-state"

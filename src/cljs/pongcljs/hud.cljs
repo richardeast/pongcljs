@@ -18,8 +18,6 @@
 (defn text-size-data [state] (q/text-size (get-in state [:hud :colors :text-size-data])))
 (defn text-size-position [state] (q/text-size (get-in state [:hud :colors :text-size-position])))
 (defn set-color [state] (hex/fill (get-in state [:hud :colors :text-color])))
-(defn screen-height [state] (last (get-in state [:screen :size])))
-(defn screen-width [state] (first (get-in state [:screen :size])))
 (defn screen-size [state] (get-in state [:screen :size]))
 
 (defn lineAngle
