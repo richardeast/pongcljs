@@ -1,8 +1,11 @@
 (ns pongcljs.camera
-  (:refer-clojure :exclude [update]))
+  (:refer-clojure :exclude [update])
+  (:require [pongcljs.logging :as log]))
 
 (defn update
-  [state f] (update-in state [:camera :angle] f))
+  [state f]
+  (log/info "Update camara")
+  (update-in state [:camera :angle] inc))
 
 (defn change-angle
   "Change the current camera angle. f will be inc or dec"
@@ -22,7 +25,11 @@
                            (update dec-camera-state inc)
                            ;else
                            dec-camera-state)]
-    (-> inc-camera-state
+ ;; TODO This should be done elsewhere
+ ;;   (-> inc-camera-state
         ;; TODO constrain the movement of the horizon based on min/max camera angle
-        (assoc-in [:universe :game-world :horizon]
-                  (f current-horrizon)))))
+        ;; (assoc-in [:universe :game-world :horizon]
+        ;;           (f current-horrizon)))
+   inc-camera-state
+
+    ))
