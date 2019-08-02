@@ -3,6 +3,7 @@
   Used for showing details about the game and state to help coding/debugging."
   (:require [quil.core :as q :include-macros true]
             [pongcljs.hex-rgb :as hex]
+            [pongcljs.universe.game-world :as game-world]
             [cljs.pprint :as pprint]))
 
 ;; Bret Victor - Inventing on Principle https://www.youtube.com/watch?v=PUv66718DII
@@ -100,9 +101,11 @@
 (defn draw-game-court
   [state]
   (text-size-position state)
-;;  (pprint-xy (q/width) 0 (- (q/width) 60) 20) ;; top right
-  ;; bottom left and bottom right are shown already in draw-corners-of-screen
-  )
+  (let [[x1 y1 x2 y2 _ _ _ _] (game-world/get-court-quadrant state)]
+    ;;  (pprint-xy (q/width) 0 (- (q/width) 60) 20) ;; top right
+    ;; bottom left and bottom right are shown already in draw-corners-of-screen
+    (pprint-xy x1 y1 (+ x1 8) (+ y1 15))
+    (pprint-xy x2 y2 (- x2 50) (+ y2 15))))
 
 (defn draw
   "Head-up Display"

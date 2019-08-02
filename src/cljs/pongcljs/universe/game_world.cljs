@@ -53,14 +53,20 @@
 
 ;; TODO Magic Numbers here.
 ;; This needs to be based off the size of the screen and the camera angle.
-(defn draw-court-quadrant [state]
+
+(defn get-court-quadrant
+  "The hud uses this function too"
+  [state]
   (let [[w h] (get-in state [:screen :size])
-        court-top (horizon-height state)
-        ;; court-quadrant {:top-left :top-right :bottom-right :bottom-left }
-        [x1 y1 x2 y2 x3 y3 x4 y4] [(/ w 4.25) court-top
-                                   (- w (/ w 4.25)) court-top
-                                   w h
-                                   0 h]]
+        court-top (horizon-height state)]
+    ;; court-quadrant {:top-left :top-right :bottom-right :bottom-left }
+    [(/ w 4.25) court-top
+     (- w (/ w 4.25)) court-top
+     w h
+     0 h]))
+
+(defn draw-court-quadrant [state]
+  (let [[x1 y1 x2 y2 x3 y3 x4 y4] (get-court-quadrant state)]
     (q/quad x1 y1
             x2 y2
             x3 y3
