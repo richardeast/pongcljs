@@ -58,12 +58,13 @@
               :game-world {:pos {:x 0 :y 0}
                            :color nil
                            :functions {:draw :game-world} ; TODO - Don't need in the long run
-                           :horizon nil
+                           :horizon 0
                            :items {:sky {:colors {:fill-color nil}}
                                    :ground {:colors {:fill-color nil}}
                                    :tennis-court {:colors {:stroke-color nil
                                                            :stroke-weight 3
-                                                           :fill-color nil}}}}
+                                                           :fill-color nil}
+                                                  :circle {:diameter 200}}}}
               :player {:colors {:stroke-color nil
                                 :stroke-weight 3
                                 :fill-color nil

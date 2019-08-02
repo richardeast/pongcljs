@@ -60,8 +60,10 @@
   (let [[w h] (get-in state [:screen :size])
         court-top (horizon-height state)]
     ;; court-quadrant {:top-left :top-right :bottom-right :bottom-left }
-    [(/ w 4.25) court-top
-     (- w (/ w 4.25)) court-top
+    [0 ; (/ w 4.25)
+     court-top
+     w ; (- w (/ w 4.25))
+     court-top
      w h
      0 h]))
 
@@ -72,11 +74,38 @@
             x3 y3
             x4 y4)))
 
+(defn get-player-line
+  [state]
+  (let [[w h] (get-in state [:screen :size])
+        ;;TODO factor in the camera angle
+        w1 0
+        w2 w
+        new-height (/ h 1.25)]
+    [w1 new-height w2 new-height]))
+
+(defn get-boss-line
+  [state]
+  (let [[w h] (get-in state [:screen :size])
+        ;;TODO factor in the camera angle
+        w1 0
+        w2 w
+        new-height (/ h 4)]
+    [w1 new-height w2 new-height]))
+
+(defn get-centre-circle
+  [state]
+  ;;TODO factor in the camera angle
+  (let [diameter (get-in state [:universe :game-world :items
+                                :tennis-court :circle :diameter])
+        {:keys [x y]} (centre state)]
+    [x y diameter diameter]))
+
+
 ;; TODO Magic Numbers here. Move to the game-world state.
 (defn draw-tennis-court [state]
-  (let [[w h] (get-in state [:screen :size])
-        centre-x (:x (centre state))
-        centre-y (:y (centre state))
+  (let [[p1 p2 p3 p4] (get-player-line state)
+        [b1 b2 b3 b4] (get-boss-line state)
+        [c1 c2 c3 c4] (get-centre-circle state)
         {:keys [fill-color
                 stroke-color
                 stroke-weight]} (get-in state [:universe :game-world :items
@@ -85,9 +114,9 @@
     (hex/stroke stroke-color)
     (q/stroke-weight stroke-weight)
     (draw-court-quadrant state)
-    (q/line 172 (/ h 3.5) 677 (/ h 3.5))
-    (q/line 55 (/ h 1.3) 794 (/ h 1.3))
-    (q/ellipse centre-x centre-y 200 75)
+    (q/line p1 p2 p3 p4)
+    (q/line b1 b2 b3 b4)
+    (q/ellipse c1 c2 c3 c4)
     ;;TODO These have side effects later on. Delete and fix the issue they cause.
     (q/stroke 0)
     (q/stroke-weight 1)

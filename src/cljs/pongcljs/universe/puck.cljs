@@ -51,7 +51,7 @@
         (change-direction toggle)
         (assoc-in [:universe :puck :speed :y] new-direction))))
 
-(defn yspeedx
+(defn yspeed
   ""
   [state]
   ;;TODO need to add some friction to slow speedy pucks down over time,
@@ -70,6 +70,19 @@
   (let [y (get-in state [:universe :puck :pos :y])
         yspeed (get-in state [:universe :puck :speed :y])]
     (+ y yspeed)))
+
+(def negate -) ; (doc -) Negation can be thought as multiplication by -1
+
+(defn xcollision
+    "if puck hits wall bounce off"
+    [state]
+    (let [left-wall 0
+          right-wall (first (get-in state [:screen :size]))
+          x (get-in state [:universe :puck :pos :x])]
+      (cond
+        (or (< x left-wall)
+            (> x right-wall)) (update-in state [:universe :puck :speed :x] negate)
+        :else state)))
 
 (defn update-x [state]
   (let [x (get-in state [:universe :puck :pos :x])
@@ -93,10 +106,11 @@
 ;;TODO update the width height here.
 ;; so it's easier to monitor.
 (defn update [state]
-  (let [x (update-x state)
-        y (update-y state)]
-    (assoc-in state [:universe :puck :pos] {:x x
-                                            :y y})))
+  (let [s (xcollision state)
+        x (update-x s)
+        y (update-y s)]
+    (assoc-in s [:universe :puck :pos] {:x x
+                                        :y y})))
 
 (defn reset-in-centre
   "Puts the puck state in the centre of the board. This function is called outside of this namespace, such as when a player scores."

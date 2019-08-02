@@ -101,11 +101,19 @@
 (defn draw-game-court
   [state]
   (text-size-position state)
-  (let [[x1 y1 x2 y2 _ _ _ _] (game-world/get-court-quadrant state)]
-    ;;  (pprint-xy (q/width) 0 (- (q/width) 60) 20) ;; top right
+  (let [[x1 y1 x2 y2 _ _ _ _] (game-world/get-court-quadrant state)
+        [p1 p2 p3 p4] (game-world/get-player-line state)
+        [b1 b2 b3 b4] (game-world/get-boss-line state)
+        [c1 c2 c3 c4] (game-world/get-centre-circle state)]
     ;; bottom left and bottom right are shown already in draw-corners-of-screen
     (pprint-xy x1 y1 (+ x1 8) (+ y1 15))
-    (pprint-xy x2 y2 (- x2 50) (+ y2 15))))
+    (pprint-xy x2 y2 (- x2 50) (+ y2 15))
+    (pprint-xy p1 p2 (+ p1 8) (+ p2 15))
+    (pprint-xy p3 p4 (- p3 50) (+ p4 15))
+    (pprint-xy b1 b2 (+ b1 8) (+ b2 15))
+    (pprint-xy b3 b4 (- b3 50) (+ b4 15))
+    (pprint-xy c1 c2 (+ c1 (/ c3 2)) (+ c2 (/ c3 2)))
+    (q/text (str "\n\n" c3 "x" c4) (+ c1 (/ c3 2)) (+ c2 (/ c3 2)))))
 
 (defn draw
   "Head-up Display"

@@ -37,7 +37,7 @@
      (assoc-in [:universe :game-world :items :sky :colors :fill-color] col3)
      (assoc-in [:universe :game-world :items :tennis-court :colors :fill-color] col4)
      (assoc-in [:universe :game-world :items :tennis-court :colors :stroke-color] col0)
-     (assoc-in [:universe :game-world :horizon] (/ screen-height 6))
+     ;; (assoc-in [:universe :game-world :horizon] (/ screen-height 6))
 
      (assoc-in [:universe :player :colors :fill-color] col0)
      (assoc-in [:universe :player :colors :stroke-color] col0)
