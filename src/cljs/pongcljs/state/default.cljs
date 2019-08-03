@@ -19,7 +19,7 @@
             :min-angle -100} ;; TODO these min/max angles are a smell. Ought to make it a real angle, like 90 degrees.
    :event nil
    :frame-rate 25
-   :hud {:show true
+   :hud {:show false
          :colors {:text-color "#00ff00"
                   :text-size-data 20
                   :text-size-position 12}}
@@ -62,7 +62,7 @@
                            :items {:sky {:colors {:fill-color nil}}
                                    :ground {:colors {:fill-color nil}}
                                    :tennis-court {:colors {:stroke-color nil
-                                                           :stroke-weight 3
+                                                           :stroke-weight 2
                                                            :fill-color nil}
                                                   :circle {:diameter 200}}}}
               :player {:colors {:stroke-color nil
@@ -86,7 +86,7 @@
                                  }
                      :pos {:x 0
                            :y 0}
-                     :speed {:x 5 :y 5}
+                     :speed {:x 10 :y 10}
                      :diameter 30 ; TODO might be nice for these to be relative to the screen size
                      :depth 5}}})
 ;; That'll do pig, that'll do
