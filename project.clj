@@ -19,7 +19,7 @@
   :license {:name "GPLv3"
             :url "http://www.opensource.org/licenses/GPL-3.0"}
   :dependencies [[org.clojure/clojure "1.10.0"]
-                 [org.clojure/clojurescript "1.10.439"]
+                 [org.clojure/clojurescript "1.10.520"]
                  [quil "2.8.0"]
                  [cljs-bach "0.3.0"] ; for sound
                  [reagent-utils "0.3.3"]] ; for saving cookies
